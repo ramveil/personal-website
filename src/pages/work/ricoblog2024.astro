@@ -1,0 +1,61 @@
+---
+import { Image } from "astro:assets";
+import PostLayout from "@/layouts/PostLayout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import ActionBar from "@/components/widgets/ActionBar.astro";
+import SeparatorLine from "@/components/elements/SeparatorLine.astro";
+
+
+// 手动导入图片
+import P_01 from "../../assets/work/ricoblog2024/P_01.jpg";
+import P_02 from "../../assets/work/ricoblog2024/P_02.jpg";
+import P_03 from "../../assets/work/ricoblog2024/P_03.jpg";
+import P_04 from "../../assets/work/ricoblog2024/P_04.jpg";
+import P_05 from "../../assets/work/ricoblog2024/P_05.jpg";
+import P_06 from "../../assets/work/ricoblog2024/P_06.jpg";
+import P_07 from "../../assets/work/ricoblog2024/P_07.jpg";
+const images = [P_01, P_02, P_03, P_04, P_05, P_06, P_07];
+
+import logoUrl from "../../assets/work/ricoblog2024/logo.png";
+---
+<PostLayout
+	title="Rico Designer Blog 2024"
+	description = 'A personal blog site designed and developed by RicoDesigner in 2024, showcasing his design philosophy and portfolio.',
+	keywords = 'Rico Designer, Blog, Portfolio, Open Source, Web Design, Astro.js, Figma',
+>
+	<div class="work article">
+		<main class="work-wrapper">
+				<PageHeader
+					title="Rico Designer Blog 2024"
+					tags={["Designer","Portfolio","Open Source"]}
+					className="mb-6 md:mb-8"
+				>
+				</PageHeader>
+			</section>
+			<div class="site-container m-auto">
+				<SeparatorLine />
+			</div>
+			<section class="article-content">
+				<div class="site-container mx-auto my-8 md:my-16 ">
+					<div>
+						<p>
+							我每一年都会计划制作一个人网站，在其中运用自己当时喜欢的技术、热爱的风格和即时的想法。从设计细节中去看到我的审美、思想、设计的看法等一切的动态变化。 这真的十分有趣。
+						</p>
+						<p>本次的网站开发，从突然有了想法，确定设计风格、选择技术栈，到整个网站框架大概制作完毕，其实只花了大约一周时间。会不会有人好奇我思考原型和设计稿、开发的过程呢？</p>
+						<p>实际上设计的部分，一页都没有画，想法已经在脑海里了，只是用了 Figma 直接制作需要的元素素材。然后在开发的时候，一边写代码一边调整设计。</p>
+						<p>技术栈选择： Figma + Astro （💡Astro.js 推荐! 设计师也可以很快学会的前端框架！）</p>
+					</div>
+					{images.map((img, index) => (
+						<picture class="picture mt-8 md:mt-12 mb-8 md:mb-12 rounded-2xl overflow-hidden">
+						<Image src={img} alt={`Rico Blog 2024 设计图 ${index + 1}`} class="w-full h-full object-cover" loading="lazy" decoding="async" quality={100}/>
+						</picture>
+					))}
+
+				</div>
+			</section>
+		</main>
+	</div>
+	<ActionBar logo={logoUrl} tags={["Designer", "Blog"]} url="https://ricoui.com/" github="https://github.com/ricocc/ricoblog2024" visitLabel="Visit Site" />
+</PostLayout>
+
+

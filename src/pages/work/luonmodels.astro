@@ -1,0 +1,59 @@
+---
+import { Image } from "astro:assets";
+import PostLayout from "@/layouts/PostLayout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import ActionBar from "@/components/widgets/ActionBar.astro";
+import SeparatorLine from "@/components/elements/SeparatorLine.astro";
+
+//自动导入 Image 组件和图像
+const allImagesModules = import.meta.glob('../../assets/work/luonmodels/*.{jpg,png,webp}', { eager: true });
+const allImages = Object.values(allImagesModules) as Array<{ default: any }>;
+const logoUrl = "https://luonmodels.vercel.app/favicon.png";
+---
+<PostLayout
+	title="LUON - Agency Website Template"
+	description = 'LUONModels is a sleek and fluid Astro enterprise template specifically designed for modeling agencies, photographers, and studios.',
+	keywords = 'LUONModels, Agency Website Template, Astro, Modeling Agency, Photographer, Studio',
+>
+	<div class="work article">
+		<main class="work-wrapper">
+				<PageHeader
+					title="LUON - Agency Website Template"
+					tags={["Designer","Portfolio","Open Source"]}
+					className="mb-6 md:mb-8"
+				>
+				</PageHeader>
+			</section>
+			<div class="site-container m-auto">
+				<SeparatorLine />
+			</div>
+			<section class="article-content">
+				<div class="site-container mx-auto my-8 md:my-16 ">
+					<div>
+						<p>
+							LUONModels is a sleek and fluid Astro enterprise template specifically designed for modeling agencies, photographers, and studios. It aims to showcase people, photography, and information clearly and effectively, while also making it convenient to build event pages, content blogs, and various other specialized pages.
+						</p>
+						<p>Features</p>
+						<ul>
+							<li>✅ Responsive Design: Fully optimized for mobile and desktop viewing, ensuring a consistent experience across devices.</li>
+							<li>✅ Built with Astro.js: Leverages the powerful features of Astro.js for optimized performance and easy customize.</li>
+							<li>✅ Intuitive User Interface: Minimalist layout promotes ease of use, allowing users to find what they need without confusion.</li>
+							<li>✅ Speed Optimization: Engineered for exceptional loading times, ensuring that users don’t have to wait on page loads.</li>
+							<li>✅ Customizable Components: Flexibility to customize elements easily, aligning with your brand’s identity and needs.</li>
+							<li>✅ SEO Friendly: Built with search engine optimization in mind, helping improve visibility and rankings.</li>
+						</ul>
+						<p>🔗🔗 <a href="https://luonmodels.vercel.app/" target="_blank">Live Demo</a></p>
+					</div>
+					{allImages.map((img, index) => (
+						<picture class="picture mt-8 md:mt-12 mb-8 md:mb-12 rounded-2xl overflow-hidden">
+						<Image src={img.default} alt={`Image ${index + 1}`} class="w-full h-full object-cover" loading="lazy" decoding="async" quality={100}/>
+						</picture>
+					))}
+				</div>
+			</section>
+		</main>
+	</div>
+	<ActionBar logo={logoUrl} tags={["Agency", "Website"]} url="https://luonmodels.vercel.app/" github="https://ricoui.gumroad.com/l/luon" visitLabel="Visit Site" />
+</PostLayout>
+
+

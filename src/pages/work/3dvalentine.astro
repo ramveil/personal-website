@@ -1,0 +1,64 @@
+---
+import { Image } from "astro:assets";
+import PostLayout from "@/layouts/PostLayout.astro";
+import PageHeader from "@/components/elements/PageHeader.astro";
+import ActionBar from "@/components/widgets/ActionBar.astro";
+import SeparatorLine from "@/components/elements/SeparatorLine.astro";
+
+const workTitle = "3D Valentines Assets";
+const workDescription =  "Design Resources & Tools";
+const workTags = ["3D", "Resources", "Tools"];
+
+// 手动导入图片
+import Img01 from "../../assets/work/free-3d-valentines-assets/01.jpg";
+import Img02 from "../../assets/work/free-3d-valentines-assets/02.jpg";
+import Img03 from "../../assets/work/free-3d-valentines-assets/03.jpg";
+import Img04 from "../../assets/work/free-3d-valentines-assets/04.jpg";
+const images = [Img01, Img02, Img03, Img04];
+
+import logoUrl from "../../assets/work/free-3d-valentines-assets/logo.png";
+---
+<PostLayout
+	title={workTitle}
+	description="Free 3D Valentine's Day assets for designers and developers. High-quality 3D models and designs for your projects."
+	keywords="3D, Valentine's Day, Design Resources, 3D Models, Free Assets, Design Tools"
+>
+	<div class="work article">
+		<main class="work-wrapper">
+				<PageHeader
+					title={workTitle}
+					tags={workTags}
+					className="mb-6 md:mb-8"
+				>
+				</PageHeader>
+			</section>
+			<div class="site-container m-auto">
+				<SeparatorLine />
+			</div>
+			<section class="article-content">
+				<div class="site-container mx-auto my-8 md:my-16 ">
+					<div>
+						<p>
+							An exquisite collection of 3D Valentine's Day materials, providing creative inspiration for designers and developers. This free 3D resource pack includes various high-quality models and designs that can be used for your Valentine's Day themed projects.
+						</p>
+						<p>These 3D resources feature modern design styles with rich details and textures. Whether used for website design, application interfaces, social media content, or other creative projects, these resources can help you create unique Valentine's Day experiences.</p>
+						<p>All resources are free to use and suitable for both personal and commercial projects. Feel free to download and use these beautiful 3D Valentine's Day materials in your designs.</p>
+					</div>
+
+					{images.map((img, index) => (
+						<picture class="picture mt-8 md:mt-12 mb-8 md:mb-12 rounded-2xl overflow-hidden">
+						<Image src={img} alt={`3D Valentine's Day asset ${index + 1}`} class="w-full h-full object-cover" loading="lazy" decoding="async" quality={100}/>
+						</picture>
+					))}
+				</div>
+			</section>
+		</main>
+	</div>
+	<ActionBar 
+		logo={logoUrl} 
+		tags={workTags} 
+		url="https://valentine.uiuxdeck.com/" 
+		github="https://github.com/ricocc/free-3d-valentines-assets" 
+		visitLabel="Visit Site" 
+	/>
+</PostLayout>
