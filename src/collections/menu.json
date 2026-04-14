@@ -4,12 +4,12 @@
 		"url": "/"
 	},
 	{
-		"name": "Writing",
-		"url": "/blog"
+		"name": "Writeups",
+		"url": "/writeups"
 	},
 	{
-		"name": "Works",
-		"url": "/works"
+		"name": "Projects",
+		"url": "/projects"
 	},
 	{
 		"name": "About",

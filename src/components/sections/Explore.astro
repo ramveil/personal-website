@@ -2,7 +2,6 @@
 import SectionHeader from "@/components/elements/SectionHeader.astro";
 import Matter from "@/components/ui/Matter.astro";
 import Button from "@/components/ui/Button.astro";
-import Tools from "../ui/Tools.astro";
 interface Props {
   title?: string;
   description?: string;
@@ -18,71 +17,20 @@ const {title, description
     </div>
 
     <div class="explore-content w-full relative mt-6 sm:mt-8">
-        <div class="explore-list w-full relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            <!-- 第一列 -->
-            <div class="explore-column explore-column-1 w-full flex gap-3 sm:gap-4 flex-col">
-                <div class="explore-item bg-bg-secondary/75   dark:bg-bg-secondary-dark relative overflow-hidden rounded-xl border border-primary/15 dark:border-neutral-700/50 explore-item-1 h-[200px] sm:h-[220px] md:h-[264px]"
-  data-aos="fade-up-sm"
-  data-aos-delay="500"
-  data-aos-duration="600"
-  data-aos-once="true">
-                    <div class="content">
-                        <h3>Design & Code</h3>
-                        <p>Turning ideas into beautiful, functional experiences.</p>
-                        <!-- <div class="mt-2 btn opacity-0 transition duration-300 ease-in-out">
-                            <Button type="disabled" url="#" size="sm">
-                                Coming Soon
-                            </Button>
-                        </div> -->
-                    </div>
-                    <div class="absolute keyboard right-[-35%] sm:right-[-50%] md:right-[-58%] bottom-0 top-0 flex items-center self-center w-[300px] sm:w-[320px] md:w-[390px] h-auto">
-                        <img src="/assets/tools/keyboard.png" alt="Keyboard" class="w-full h-full object-cover">
-                    </div>
-                </div>
-                <div class="explore-item bg-bg-secondary/75   dark:bg-bg-secondary-dark  relative overflow-hidden rounded-xl border border-primary/15 dark:border-neutral-700/50 explore-item-2 h-[180px] sm:h-[200px]"
-  data-aos="fade-up-sm"
-  data-aos-delay="600"
-  data-aos-duration="600"
-  data-aos-once="true">
-                    <div class="content">
-                        <h3>Faves</h3>
-                        <p>Picked things I'm genuinely into.</p>
-                    </div>
-                    <div class="explore-figure game-container absolute right-0 bottom-0 top-0 w-full h-full">
-                        <div class="absolute game right-[-21%] bottom-0 top-0 mt-[-10%] flex items-center self-center w-auto h-[100px] sm:h-[120px] md:h-[130px] z-10" data-game="1">
-                            <img src="/assets/tools/game/05-game-cassette.png" alt="Game Cassette 5" class="w-full h-full object-cover self-center flex">
-                        </div>
-                        <div class="absolute game right-[-19%] bottom-0 top-0 mt-[-5%] flex items-center self-center w-auto h-[100px] sm:h-[120px] md:h-[130px] z-20" data-game="2">
-                            <img src="/assets/tools/game/04-game-cassette.png" alt="Game Cassette 4" class="w-full h-full object-cover self-center flex">
-                        </div>
-                        <div class="absolute game right-[-16%] bottom-0 top-0 mt-0 flex items-center self-center w-auto h-[100px] sm:h-[120px] md:h-[130px] z-30" data-game="3">
-                            <img src="/assets/tools/game/03-game-cassette.png" alt="Game Cassette 3" class="w-full h-full object-cover self-center flex">
-                        </div>
-                        <div class="absolute game right-[-13%] bottom-0 top-0 mt-[5%] flex items-center self-center w-auto h-[100px] sm:h-[120px] md:h-[130px] z-40" data-game="4">
-                            <img src="/assets/tools/game/02-game-cassette.png" alt="Game Cassette 2" class="w-full h-full object-cover self-center flex">
-                        </div>
-                        <div class="absolute game right-[-10%] bottom-0 top-0 mt-[10%] flex items-center self-center w-auto h-[100px] sm:h-[120px] md:h-[130px] z-50" data-game="5">
-                            <img src="/assets/tools/game/01-game-cassette.png" alt="Game Cassette 1" class="w-full h-full object-cover self-center flex">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 第二列 -->
-            <div class="explore-column explore-column-2 w-full flex gap-3 sm:gap-4 flex-col">
+        <div class="explore-list w-full relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-y-3 gap-x-2 sm:gap-y-4 sm:gap-x-3 lg:gap-x-8">
+            
+            <div class="explore-coevlumn explore-column-1 w-full flex gap-3 sm:gap-4 flex-col">
+                
                 <div class="explore-item bg-bg-secondary/75   dark:bg-bg-secondary-dark relative overflow-hidden rounded-xl border border-primary/15 dark:border-neutral-700/50 explore-item-3 h-[180px] sm:h-[200px]"
-  data-aos="fade-up-sm"
-  data-aos-delay="700"
-  data-aos-duration="600"
-  data-aos-once="true">
+                    data-aos="fade-up-sm"
+                    data-aos-delay="700"
+                    data-aos-duration="600"
+                    data-aos-once="true">
                     <div class="content">
-                        <h3>Writing</h3>
-                        <p>Style guides, design notes, and quick reads.</p>
+                        <h3>Writeups</h3>
+                        <p>Security notes, CTFs, and quick reads.</p>
                         <div class="mt-2 btn opacity-0 transition duration-300 ease-in-out">
-                            <!-- <Button url="/blog" size="sm">
-                                Blog
-                            </Button> -->
-                        </div>
+                            </div>
                     </div>
                     <div class="explore-figure computer absolute right-[5%] sm:right-[-10%] md:right-[-7%] bottom-[14%] w-[120px] sm:w-[130px] md:w-[148px] h-auto">
                         <img src="/assets/tools/retro-computer.png" alt="Explore 1" class="w-full h-full object-cover z-10 relative">
@@ -91,12 +39,7 @@ const {title, description
                             id="explore-computer-video"
                             src="/assets/tools/dreamcore.mp4"
                             poster="/assets/tools/dreamcore.jpg"
-                            autoplay
-                            loop
-                            muted
-                            playsinline
-                            webkit-playsinline
-                            preload="auto"
+                            autoplay loop muted playsinline webkit-playsinline preload="auto"
                             controlslist="nodownload noplaybackrate nofullscreen noremoteplayback"
                             disablepictureinpicture
                             class="w-full h-full object-cover"
@@ -104,28 +47,29 @@ const {title, description
                         </div>
                     </div>
                 </div>
+
                 <div class="explore-item bg-bg-secondary/75   dark:bg-bg-secondary-dark explore-item-3 relative overflow-hidden rounded-xl border border-primary/15 dark:border-neutral-700/50 explore-item-4 h-[200px] sm:h-[220px] md:h-[264px]"
-  data-aos="fade-up-sm"
-  data-aos-delay="800"
-  data-aos-duration="600"
-  data-aos-once="true">
+                    data-aos="fade-up-sm"
+                    data-aos-delay="800"
+                    data-aos-duration="600"
+                    data-aos-once="true">
                     <div class="content">
                         <h3>My Tools</h3>
                         <p>Design tools I built to speed up my workflow!</p>
                     </div>
-                    <div class=" explore-figure absolute machine right-[5%] sm:right-[-10%] md:right-[-7%] bottom-0 top-0 flex items-center">
-                        <Tools />
+                    
+                    <div class="explore-figure machine absolute right-[-10%] sm:right-[-10%] md:right-[-7%] bottom-[14%] sm:bottom-[20%] md:bottom-[30%] w-[120px] sm:w-[140px] md:w-[190px] h-auto">
+                        <img src="/images/my-tools.png" alt="My Tools" class="w-full h-full object-cover z-10 relative">
                     </div>
                 </div>
             </div>
 
-
             <div class="explore-column explore-column-3 w-full col-span-1 sm:col-span-2 lg:col-span-1">
                 <div class="explore-item bg-bg-secondary/75   dark:bg-bg-secondary-dark explore-item-3 relative overflow-hidden rounded-xl border border-primary/15 dark:border-neutral-700/50 explore-item-5"
-  data-aos="fade-up-sm"
-  data-aos-delay="900"
-  data-aos-duration="600"
-  data-aos-once="true">
+                    data-aos="fade-up-sm"
+                    data-aos-delay="900"
+                    data-aos-duration="600"
+                    data-aos-once="true">
                     <div
                     class="explore-figure tool-stack-box relative rounded-xl overflow-hidden w-full h-[480px] sm:h-[400px] md:h-[480px]"
                     data-aos="fade-up-sm"

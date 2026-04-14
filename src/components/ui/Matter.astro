@@ -51,7 +51,7 @@ import Matter from "matter-js";
     // Config (enlarge element size & reduce edge gaps)
     const pad = 2;      // Inner padding; smaller value sticks closer to edges
     const margin = 1;   // Distance between static boundaries and container edges; smaller value sticks closer
-    const count = 15;   // Number of elements
+    const count = 20;   // Number of elements
     const noRotate = false; // Set to true to disable rotation
     const scaleFactor = 0.75; // Global scaling factor: >1 enlarge, <1 shrink
 
@@ -79,20 +79,22 @@ import Matter from "matter-js";
 
     // Icon paths (adjust as needed)
     const iconUrls = [
-      "/assets/stack/astro.png",
+      "/assets/stack/All.png",
+      "/assets/stack/ArchLinux.png",
+      "/assets/stack/burpsuite.png",
       "/assets/stack/css.png",
-      "/assets/stack/github.png",
+      "/assets/stack/Figma.png",
       "/assets/stack/html.png",
-      "/assets/stack/bootstrap.png",
-      "/assets/stack/cloudflare.png",
       "/assets/stack/js.png",
-      "/assets/stack/netlify.png",
-      "/assets/stack/nextjs.png",
-      "/assets/stack/nodejs.png",
-      "/assets/stack/npm.png",
-      "/assets/stack/tailwind.png",
-      "/assets/stack/vercel.png",
+      "/assets/stack/kali-linux.png",
+      "/assets/stack/Laravel.png",
+      "/assets/stack/linux.png",
+      "/assets/stack/metasploit.png",
+      "/assets/stack/Python.png",
+      "/assets/stack/TypeScript.png",
+      "/assets/stack/VIM.png",
       "/assets/stack/vscode.png",
+      "/assets/stack/windows.png",
     ];
 
     // Preload images to obtain naturalWidth/Height
@@ -107,11 +109,18 @@ import Matter from "matter-js";
       });
     }
 
-    let iconsImgs: HTMLImageElement[] = [];
-    try {
-      iconsImgs = await Promise.all(iconUrls.map(loadImage));
-    } catch (e) {
-      console.error("[Tricks] image load failed:", e);
+    const imageResults = await Promise.allSettled(iconUrls.map(loadImage));
+    const iconsImgs = imageResults
+      .filter((result): result is PromiseFulfilledResult<HTMLImageElement> => result.status === "fulfilled")
+      .map((result) => result.value);
+
+    const failedUrls = imageResults
+      .map((result, index) => ({ result, index }))
+      .filter(({ result }) => result.status === "rejected")
+      .map(({ index }) => iconUrls[index]);
+
+    if (failedUrls.length > 0) {
+      console.warn("[Tricks] some images failed to load:", failedUrls);
     }
 
     // Sizing strategy: significantly increase target area range (adapted for 720x480)

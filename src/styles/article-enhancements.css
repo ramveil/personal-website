@@ -47,7 +47,7 @@
   }
 
   /* Code copy button styles */
-  .article-content pre {
+  .article-content > pre {
     position: relative;
   }
 
@@ -67,7 +67,7 @@
     transition: all 0.2s ease;
   }
 
-  .article-content pre:hover .copy-code-button {
+  .article-content > pre:hover .copy-code-button {
     opacity: 1;
   }
 
@@ -155,21 +155,21 @@
   }
 
   /* Inline code highlight variants */
-  .article-content .language-js,
-  .article-content .language-javascript {
+  .article-content :not(pre) > code.language-js,
+  .article-content :not(pre) > code.language-javascript {
     color: rgb(234,179,8);
   }
 
-  .article-content .language-ts,
-  .article-content .language-typescript {
+  .article-content :not(pre) > code.language-ts,
+  .article-content :not(pre) > code.language-typescript {
     color: var(--color-primary);
   }
 
-  .article-content .language-css {
+  .article-content :not(pre) > code.language-css {
     color: rgb(236,72,153);
   }
 
-  .article-content .language-html {
+  .article-content :not(pre) > code.language-html {
     color: rgb(249,115,22);
   }
 
@@ -280,7 +280,8 @@
       text-decoration: underline;
     }
 
-    .article-content pre,
+    .article-content > pre,
+    .article-content .expressive-code,
     .article-content blockquote {
       page-break-inside: avoid;
     }
@@ -358,4 +359,3 @@
     }
   }
 }
-

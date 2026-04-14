@@ -1,68 +1,55 @@
 [
 	{
         "id": 1,
-		"name": "Github",
-        "username": "ricocc",
+		"name": "GitHub",
+        "username": "ramveil",
 		"image": "/assets/social/social-github.jpg",
-		"url": "https://github.com/ricocc/"
+		"url": "https://github.com/ramveil",
+		"isShow": true
 	},
 
 	{
         "id": 2,
-		"name": "Xiaohongshu",
-        "username": "ricouii",
-		"image": "/assets/social/social-xiaohongshu.jpg",
-		"url": "https://www.xiaohongshu.com/user/profile/5f2b6903000000000101f51f"
+		"name": "LinkedIn",
+        "username": "Setya Ramadan",
+		"image": "/assets/social/social-linkedin.png",
+		"url": "https://www.linkedin.com/in/setyaramadan28",
+		"isShow": true
 	},
 
     {
         "id": 3,
-		"name": "Twitter",
-        "username": "ricouii",
-		"image": "/assets/social/social-twitter.jpg",
-		"url": "https://x.com/ricouii"
+		"name": "Email",
+        "username": "rama",
+		"image": "/assets/social/social-email.jpg",
+		"url": "mailto:rama@ramveil.com",
+		"isShow": true
 	},
 
     {
         "id": 4,
-		"name": "Gumroad",
-        "username": "ricoui",
-		"image": "/assets/social/social-gumroad.jpg",
-		"url": "https://ricoui.gumroad.com/"
+		"name": "CTFtime",
+        "username": "ramveil",
+		"image": "/assets/social/social-ctftime.png",
+		"url": "https://ctftime.org/user/237031",
+		"isShow": true
 	},
 
     {
         "id": 5,
-		"name": "Behance",
-        "username": "ricoui",
-		"image": "/assets/social/social-behance.jpg",
-		"url": "https://www.behance.net/ricoui"
+		"name": "Instagram",
+        "username": "setyaramadann",
+		"image": "/assets/social/social-instagram.png",
+		"url": "https://www.instagram.com/setyaramadann/",
+		"isShow": true
 	},
 
     {
         "id": 6,
-		"name": "figma",
-        "username": "ricocc",
-		"image": "/assets/social/social-figma.jpg",
-		"url": "https://www.figma.com/@ricocc",
-        "isShow": false
-	},
-
-    {
-        "id": 7,
-		"name": "Dribbble",
-        "username": "ricoui",
-		"image": "/assets/social/social-dribbble.jpg",
-		"url": "https://dribbble.com/ricoui"
-	},
-
-    {
-        "id": 8,
-		"name": "Email",
-        "username": "ricocc",
-		"image": "/assets/social/social-email.jpg",
-		"url": "mailto:ricocc@qq.com"
+		"name": "Discord",
+        "username": "ramveil's server",
+		"image": "/assets/social/social-discord.png",
+		"url": "https://discord.gg/D7X4fnnb",
+		"isShow": true
 	}
-
-
 ]

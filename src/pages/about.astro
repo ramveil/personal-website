@@ -1,16 +1,15 @@
 ---
 import {
 	ArrowUpRight,
-	Code,
+	Bug,
+	Cpu,
 	Globe,
 	Mail,
-	Monitor,
 	Palette,
-	Smartphone,
-	Zap,
+	Shield,
+	Terminal,
 } from "@lucide/astro";
 import { siteConfig } from "@/config/site.js";
-import experiences from "@/collections/experiences.json";
 import social from "@/collections/social.json";
 import AboutExperience from "@/components/elements/AboutExperience.astro";
 import Button from "@/components/ui/Button.astro";
@@ -28,6 +27,23 @@ const headings = [
 ];
 
 const filtered = headings.filter(h => h.depth <= 3);
+
+const experiences = [
+  {
+    dates: "October 2025 - Present",
+    role: "Bug Hunter",
+    company: "HackerOne - Independent Researcher",
+    description: "has obtained 2 vulnerabilities in participating in the bug bounty program",
+    logo: "/assets/experiences/hackerone.jpg",
+  },
+  {
+    dates: "August 2024 - December 2024",
+    role: "Graphic Designer",
+    company: "Y&Y Collection (Freelance)",
+    description: "just clothing design",
+    logo: "/assets/experiences/Yy.png",
+  },
+];
 
 ---
 
@@ -71,15 +87,15 @@ const filtered = headings.filter(h => h.depth <= 3);
           data-aos-duration="500"
           data-aos-once="true"
         >
-            <img src="/assets/avatar.png" alt="Ricoui" class="w-14 h-14 rounded-full">
+            <img src="/assets/avatar.png" alt="ramveil" class="w-14 h-14 rounded-full">
             <div class="flex items-center gap-3">
-              <a href="https://www.ricoui.com/" target="_blank" class="font-brand text-[24px] text-neutral-700 dark:text-neutral-100">Rico</a>
+              <a href="https://ramveil.com/" target="_blank" class="font-brand text-[24px] text-neutral-700 dark:text-neutral-100">ramveil</a>
               <span class="text-[0.75em] text-neutral-400">|</span>
-              <a href="https://x.com/ricouii" class="flex items-center gap-1 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 text-sm" target="_blank">
+              <a href="https://x.com/ramveill" class="flex items-center gap-1 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 text-sm" target="_blank">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-4.5 h-4.5 fill-current">
                   <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
                 </svg>
-                @ricouii
+                @ramveill
               </a>
             </div>
         </div>
@@ -90,7 +106,7 @@ const filtered = headings.filter(h => h.depth <= 3);
           data-aos-delay="200"
           data-aos-duration="500"
           data-aos-once="true"
-        >"Beautiful design. Clean code. That's the goal."</p>
+        >"I don’t find bugs, bugs find me and beg for mercy"</p>
         <!-- <div class="w-full border-b-1 border-dashed border-b-gray-200 dark:border-b-neutral-700 mt-4 mb-8"></div> -->
 
         <div
@@ -145,7 +161,7 @@ const filtered = headings.filter(h => h.depth <= 3);
           data-aos-duration="500"
           data-aos-once="true"
         >
-          I'm Rico, a Senior Web & Product Designer.
+          I'm Setya Ramadan, a Junior Pentester, CTF Player, &amp; Bug Hunter
         </p>
         <p
           class="text-neutral-700 pb-4 pt-4 leading-[1.8] dark:text-neutral-200"
@@ -154,7 +170,7 @@ const filtered = headings.filter(h => h.depth <= 3);
           data-aos-duration="500"
           data-aos-once="true"
         >
-          With 8+ years of experience in UX/UI, I not only enjoy creative design and content creation, but coding is also one of my great interests. I often transform my rich and quirky ideas and creativity into design outcomes and tangible projects.
+          I'm a Cybersecurity student at CCIT Faculty Engineering University of Indonesia, currently focusing on cybersecurity especially the Red Team side. I'm passionate about ethical hacking, penetration testing, and understanding how systems can be (legally) broken to make them stronger.
 
         </p>
         <p
@@ -164,7 +180,7 @@ const filtered = headings.filter(h => h.depth <= 3);
           data-aos-duration="500"
           data-aos-once="true"
         >
-          Great design isn't just a pretty interface—it helps people reach their goals naturally, fuels sustainable growth, and keeps systems solid as you scale. I connect design and development, bringing strategy, usability, and execution together to turn visuals into real, measurable results.
+          I'm currently gaining hands-on experience with tools such as Kali Linux, BurpSuite, Nmap, Metasploit, and Wireshark. I also active train on platforms like TryHackMe and Hack The Box, working on real world scenarios and CTF challenges. Always open to connect, collaborate, and learn from fellow tech and security enthusiasts. Let's grow together in this exciting field!
         </p>
 
 
@@ -175,8 +191,8 @@ const filtered = headings.filter(h => h.depth <= 3);
           data-aos-duration="500"
           data-aos-once="true"
         >
-              <Button url="mailto:hello@rico.com" > <Mail  size={16} />  hello@ricoui.com</Button>
-              <Button url={siteConfig.resume} type="fill"> Resume <ArrowUpRight  size={16} /> </Button>
+              <Button url="mailto:rama@ramveil.com" > <Mail  size={16} />  rama@ramveil.com</Button>
+              <Button url={siteConfig.resume} type="fill" download={true}> Resume <ArrowUpRight  size={16} /> </Button>
         </div>
 
         <!-- <img src="/assets/about.jpg" class="relative z-30 w-full my-10 rounded-xl" /> -->
@@ -197,57 +213,57 @@ const filtered = headings.filter(h => h.depth <= 3);
                 data-aos-duration="600"
                 data-aos-once="true"
               >
-                <!-- Product Design -->
+                <!-- Penetration Testing -->
                 <div class="item flex justify-start items-start flex-grow-0 flex-shrink-0 overflow-hidden gap-2 px-5 py-4 rounded-xl  bg-gradient-to-b from-[f7f8f0] to-[#f1f2f9]  dark:from-gray-900 dark:to-gray-800 dark:text-neutral-200 ">
                   <div class="flex justify-center items-center flex-grow-0 flex-shrink-0 gap-2">
-                    <Palette size={22} />
+                    <Shield size={22} />
                     <div class="flex-grow-0 flex-shrink-0 text-base font-medium text-left text-neutral-700 dark:text-neutral-200">
-                      Product Design
+                      Penetration Testing
                     </div>
                   </div>
                 </div>
-                <!-- Website Design -->
+                <!-- Web Exploitation -->
+                <div class="item flex justify-start items-start flex-grow-0 flex-shrink-0 overflow-hidden gap-2 px-5 py-4  rounded-xl  bg-gradient-to-b from-[f7f8f0] to-[#f1f2f9]  dark:from-gray-900 dark:to-gray-800">
+                  <div class="flex justify-center items-center flex-grow-0 flex-shrink-0 gap-2">
+                    <Bug size={22} />
+                    <div class="flex-grow-0 flex-shrink-0 text-base font-medium text-left text-neutral-700 dark:text-neutral-200">
+                      Web Exploitation
+                    </div>
+                  </div>
+                </div>
+                <!-- Binary Exploitation -->
+                <div class="item flex justify-start items-start flex-grow-0 flex-shrink-0 overflow-hidden gap-2 px-5 py-4  rounded-xl  bg-gradient-to-b from-[f7f8f0] to-[#f1f2f9]  dark:from-gray-900 dark:to-gray-800">
+                  <div class="flex justify-center items-center flex-grow-0 flex-shrink-0 gap-2">
+                    <Cpu size={22} />
+                    <div class="flex-grow-0 flex-shrink-0 text-base font-medium text-left text-neutral-700 dark:text-neutral-200">
+                      Binary Exploitation
+                    </div>
+                  </div>
+                </div>
+                <!-- Web Development -->
                 <div class="item flex justify-start items-start flex-grow-0 flex-shrink-0 overflow-hidden gap-2 px-5 py-4  rounded-xl  bg-gradient-to-b from-[f7f8f0] to-[#f1f2f9]  dark:from-gray-900 dark:to-gray-800">
                   <div class="flex justify-center items-center flex-grow-0 flex-shrink-0 gap-2">
                     <Globe size={22} />
                     <div class="flex-grow-0 flex-shrink-0 text-base font-medium text-left text-neutral-700 dark:text-neutral-200">
-                      Website Design
-                    </div>
-                  </div>
-                </div>
-                <!-- Brand Design -->
-                <div class="item flex justify-start items-start flex-grow-0 flex-shrink-0 overflow-hidden gap-2 px-5 py-4  rounded-xl  bg-gradient-to-b from-[f7f8f0] to-[#f1f2f9]  dark:from-gray-900 dark:to-gray-800">
-                  <div class="flex justify-center items-center flex-grow-0 flex-shrink-0 gap-2">
-                    <Zap size={22} />
-                    <div class="flex-grow-0 flex-shrink-0 text-base font-medium text-left text-neutral-700 dark:text-neutral-200">
-                      Brand Design
-                    </div>
-                  </div>
-                </div>
-                <!-- Prototyping -->
-                <div class="item flex justify-start items-start flex-grow-0 flex-shrink-0 overflow-hidden gap-2 px-5 py-4  rounded-xl  bg-gradient-to-b from-[f7f8f0] to-[#f1f2f9]  dark:from-gray-900 dark:to-gray-800">
-                  <div class="flex justify-center items-center flex-grow-0 flex-shrink-0 gap-2">
-                    <Monitor size={22} />
-                    <div class="flex-grow-0 flex-shrink-0 text-base font-medium text-left text-neutral-700 dark:text-neutral-200">
-                      Prototyping
-                    </div>
-                  </div>
-                </div>
-                <!-- Development -->
-                <div class="item flex justify-start items-start flex-grow-0 flex-shrink-0 overflow-hidden gap-2 px-5 py-4  rounded-xl  bg-gradient-to-b from-[f7f8f0] to-[#f1f2f9]  dark:from-gray-900 dark:to-gray-800">
-                  <div class="flex justify-center items-center flex-grow-0 flex-shrink-0 gap-2">
-                    <Code size={22} />
-                    <div class="flex-grow-0 flex-shrink-0 text-base font-medium text-left text-neutral-700 dark:text-neutral-200">
-                      Development
+                      Web Development
                     </div>
                   </div>
                 </div>
                 <!-- UI/UX Design -->
                 <div class="item flex justify-start items-start flex-grow-0 flex-shrink-0 overflow-hidden gap-2 px-5 py-4  rounded-xl  bg-gradient-to-b from-[f7f8f0] to-[#f1f2f9]  dark:from-gray-900 dark:to-gray-800">
                   <div class="flex justify-center items-center flex-grow-0 flex-shrink-0 gap-2">
-                    <Smartphone size={22} />
+                    <Palette size={22} />
                     <div class="flex-grow-0 flex-shrink-0 text-base font-medium text-left text-neutral-700 dark:text-neutral-200">
                       UI/UX Design
+                    </div>
+                  </div>
+                </div>
+                <!-- Linux -->
+                <div class="item flex justify-start items-start flex-grow-0 flex-shrink-0 overflow-hidden gap-2 px-5 py-4  rounded-xl  bg-gradient-to-b from-[f7f8f0] to-[#f1f2f9]  dark:from-gray-900 dark:to-gray-800">
+                  <div class="flex justify-center items-center flex-grow-0 flex-shrink-0 gap-2">
+                    <Terminal size={22} />
+                    <div class="flex-grow-0 flex-shrink-0 text-base font-medium text-left text-neutral-700 dark:text-neutral-200">
+                      Linux
                     </div>
                   </div>
                 </div>
@@ -336,10 +352,10 @@ const filtered = headings.filter(h => h.depth <= 3);
           data-aos-once="true"
         >
           If you want to stay up to date with my work be sure to <a
-            href={siteConfig.social.twitter}
+            href={siteConfig.social.linkedin}
             target="_blank"
-            class="text-indigo-500 underline">follow me on twitter</a
-          >, or you can send me an <a href="mailto:hello@ricoui.com" class=" underline"
+            class="text-indigo-500 underline">follow me on LinkedIn</a
+          >, or you can send me an <a href="mailto:rama@ramveil.com" class=" underline"
             >email</a
           > and I'll be sure to get back to you.
         </p>

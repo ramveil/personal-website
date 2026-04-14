@@ -22,9 +22,10 @@ import "aos/dist/aos.css";
 import "../styles/aos-custom.css";
 import '../styles/article.css';
 import '../styles/article-enhancements.css';
+import mainScriptUrl from "../assets/js/main.js?url";
 ---
 
-<html lang="">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <Meta
@@ -52,6 +53,6 @@ import '../styles/article-enhancements.css';
     <Header />
     <slot />
     <Footer />
-    <script src="../assets/js/main.js"></script>
+    <script type="module" src={mainScriptUrl}></script>
   </body>
 </html>

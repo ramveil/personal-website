@@ -7,7 +7,7 @@ import Button from "@/components/ui/Button.astro";
 import AnimatedText from "@/components/ui/AnimatedText.astro";
 // 定义组件接收的属性
 const {
-  title = "Latest Articles",
+  title = "Latest Writeups",
   description = "",
   limit = 3,
   listPage = false,
@@ -20,23 +20,23 @@ const {
 } = Astro.props;
 
 // 获取博客文章集合
-const allPosts = await getCollection("post");
+const allPosts = await getCollection("writeups");
 
 // 按发布日期排序文章
-let posts = allPosts.sort(
+const sortedPosts = allPosts.sort(
   (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
 );
 
 // 查找特色文章
-const featuredPost = posts.find((post) => post.data.featured);
+const featuredPost = sortedPosts.find((post) => post.data.featured);
+const normalPosts = featuredPost
+  ? sortedPosts.filter((post) => post.id !== featuredPost.id)
+  : sortedPosts;
 
-// 如果存在特色文章，从主列表中移除
-if (featuredPost && listPage) {
-  posts = posts.filter((post) => post.data.featured !== true);
-}
+let posts = listPage ? normalPosts : sortedPosts;
 
 // 计算总页数
-const totalPages = Math.ceil(posts.length / postsPerPage);
+const totalPages = Math.ceil(normalPosts.length / postsPerPage);
 
 // 如果启用了分页，则只显示当前页的文章
 if (pagination.enable) {
@@ -52,7 +52,7 @@ if (pagination.enable) {
 const postsWithLinks = posts.map(post => {
   // 根据 Astro v5 官方文档，entry.id 就是条目的唯一标识符
   // 直接使用 entry.id 生成 URL，对于 [...slug] 路由，id 已经是正确的路径
-  const link = `/blog/${post.id}`;
+  const link = `/writeups/${post.id}`;
   return {
     ...post,
     data: {
@@ -67,7 +67,7 @@ const featuredPostWithLink = featuredPost ? {
   ...featuredPost,
   data: {
     ...featuredPost.data,
-    link: `/blog/${featuredPost.id}`
+    link: `/writeups/${featuredPost.id}`
   }
 } : null;
 ---
@@ -116,7 +116,7 @@ const featuredPostWithLink = featuredPost ? {
 
     {listPage && totalPages > 1 && (
       <Pagination
-        collection="blog"
+        collection="writeups"
         currentPage={pagination.currentPage || 1}
         totalPages={totalPages}
       />
@@ -126,7 +126,7 @@ const featuredPostWithLink = featuredPost ? {
   {/* "View All Articles" 按钮 - 仅在非列表页且启用时显示 */}
   {!listPage && showViewAllButton && (
     <div class="flex justify-center mt-12 mb-12">
-      <Button url="/blog" className="w-full max-w-60">View All Articles</Button>
+      <Button url="/writeups" className="w-full max-w-60">View All Writeups</Button>
     </div>
   )}
 </section>

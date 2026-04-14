@@ -11,9 +11,9 @@ import Explore from "@/components/sections/Explore.astro";
 ---
 
 <Layout
-title="Rico Portfolio Site 2025"
-description="Welcome to Rico's portfolio site! Explore my work as a web/UI designer with 8+ years of experience in creating captivating visuals and interactive experiences."
-keywords="Rico, Portfolio, Web Design, UI Design, Frontend Development, Creative Designer"
+title="Ramveil's Portofolio"
+description="Junior penetration tester, CTF player, and bug hunter."
+keywords="penetration testing, CTF, bug bounty, security"
 >
   <div
     class="relative site-container z-20  w-full mx-auto mt-16 px-4 md:mt-18 lg:mt-20 xl:px-0"
@@ -23,7 +23,7 @@ keywords="Rico, Portfolio, Web Design, UI Design, Frontend Development, Creative
         <!-- Title - AnimatedText animation -->
         <h1 class="mb-4">
           <AnimatedText
-            content="Hi, I'm Rico"
+            content="Hi, I'm ramveil"
             delay={0.1}
             duration={0.5}
             stagger={0.08}
@@ -34,7 +34,7 @@ keywords="Rico, Portfolio, Web Design, UI Design, Frontend Development, Creative
         <!-- First description - AnimatedText animation -->
         <div class="mb-2">
           <AnimatedText
-            content="I'm a web/UI designer with 8+ years of experience. I love blending design and code to create captivating visuals and interactive experiences."
+            content="Junior penetration tester, CTF player, and bug hunter."
             delay={0.3}
             duration={0.5}
             stagger={0.015}
@@ -45,7 +45,7 @@ keywords="Rico, Portfolio, Web Design, UI Design, Frontend Development, Creative
         <!-- Second description - AnimatedText animation -->
         <div class="mb-4">
           <AnimatedText
-            content="I believe great design should be both delightful and solve real-world challenges."
+            content="Focused on learning through hands-on security testing."
             delay={0.5}
             duration={0.5}
             stagger={0.015}
@@ -61,8 +61,8 @@ keywords="Rico, Portfolio, Web Design, UI Design, Frontend Development, Creative
           data-aos-duration="500"
           data-aos-once="true"
         >
-          <Button url={siteConfig.social.twitter} type="fill" className="m-auto mt-4 text-center sm:text-left sm:m-0 sm:mt-6 max-w-[200px]">
-            Follow me on 𝕏
+          <Button url="https://tryhackme.com/p/ramveil" type="fill" className="m-auto mt-4 text-center sm:text-left sm:m-0 sm:mt-6 max-w-[200px]">
+            Follow me on Tryhackme
           </Button>
         </div>
 
@@ -74,7 +74,7 @@ keywords="Rico, Portfolio, Web Design, UI Design, Frontend Development, Creative
           data-aos-duration="600"
           data-aos-once="true"
         >
-          <SocialCard displaySocialIds={[1, 2, 3,4]}/>
+          <SocialCard displaySocialIds={[1, 2, 3, 4, 5, 6]}/>
         </div>
       </div>
 
@@ -87,9 +87,9 @@ keywords="Rico, Portfolio, Web Design, UI Design, Frontend Development, Creative
         data-aos-once="true"
       >
         <HeroCard
-          imageUrl="/assets/home/gradientshub.jpg"
-          title="Gradientshub"
-          link="https://gradientshub.com"
+          imageUrl="/images/detective-conan.png"
+          title=""
+          link=""
         />
       </div>
     </div>
@@ -102,7 +102,7 @@ keywords="Rico, Portfolio, Web Design, UI Design, Frontend Development, Creative
     data-aos-duration="600"
     data-aos-once="true"
   >
-    <Explore title="Explore ↓"  />
+    <Explore title="Explore" />
   </section>
 
   <section
@@ -112,7 +112,7 @@ keywords="Rico, Portfolio, Web Design, UI Design, Frontend Development, Creative
     data-aos-duration="600"
     data-aos-once="true"
   >
-    <FeaturedWork title="Featured Work ↓" description="I create innovative and purposeful designs that not only capture attention but also drive meaningful results." limit={5} />
+    <FeaturedWork title="Featured Projects" description="Recent projects and experiments focused on practical, real-world outcomes." limit={5} />
   </section>
 
   <section
@@ -123,10 +123,13 @@ keywords="Rico, Portfolio, Web Design, UI Design, Frontend Development, Creative
     data-aos-once="true"
   >
     <BlogSection
-      title="Latest Articles  ↓"
-      description="These are my notes and articles on design, development and life thinking."
+      title="Latest Writeups"
+      description="Short notes and writeups on security, CTFs, and bug hunting."
       showViewAllButton={true}
     />
   </section>
 
 </Layout>
+
+
+
