@@ -22,7 +22,6 @@ import "aos/dist/aos.css";
 import "../styles/aos-custom.css";
 import '../styles/article.css';
 import '../styles/article-enhancements.css';
-import mainScriptUrl from "../assets/js/main.js?url";
 ---
 
 <html lang="en">
@@ -37,10 +36,8 @@ import mainScriptUrl from "../assets/js/main.js?url";
     <!-- Used to add dark mode right away, adding here prevents any flicker -->
     <script is:inline>
       if (typeof Storage !== 'undefined') {
-        if (
-          localStorage.getItem('dark_mode') &&
-          localStorage.getItem('dark_mode') == 'true'
-        ) {
+        const savedTheme = localStorage.getItem('dark_mode');
+        if (savedTheme === 'true' || savedTheme === null) {
           document.documentElement.classList.add('dark')
         }
       }
@@ -53,6 +50,8 @@ import mainScriptUrl from "../assets/js/main.js?url";
     <Header />
     <slot />
     <Footer />
-    <script type="module" src={mainScriptUrl}></script>
+    <script>
+      import "../assets/js/main.js";
+    </script>
   </body>
 </html>
