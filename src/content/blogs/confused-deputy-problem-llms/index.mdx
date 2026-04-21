@@ -7,7 +7,7 @@ tags:
   - LLM Security
   - Prompt Injection
   - Confused Deputy
-img: /assets/blog/cover-spacepunk.jpg
+img: /assets/blog/llmoutput.png
 img_alt: The Confused Deputy Problem in LLMs
 featured: true
 ---
@@ -16,7 +16,7 @@ import AttackFlow from '@/components/blogs/AttackFlow.astro';
 import ScenarioTabs from '@/components/blogs/ScenarioTabs.astro';
 import RiskRadar from '@/components/blogs/RiskRadar.astro';
 
-## Introduction: Why This Problem Keeps Returning
+## Why This Problem Keeps Returning
 
 The confused deputy is not a new weakness, but modern LLM systems make it easier to trigger and harder to detect. In classical security, the issue appears when a privileged component is tricked into using its authority for someone else’s intent. In LLM-driven architectures, the same pattern emerges when an agent can read untrusted content and call privileged tools within the same execution flow.
 
@@ -44,6 +44,8 @@ The most relevant targets are internal APIs, restricted documents, automation ac
 
 Indirect prompt injection is the most common delivery mechanism. Malicious instructions can be embedded in web pages, emails, PDFs, knowledge bases, or shared collaboration documents. Once retrieved, the payload is interpreted in the same context window as legitimate task content.
 
+![](./p2.jpg)
+
 The second element is ambient authority. If the model can call `send_email`, `execute_sql`, or internal admin APIs with broad credentials, then any successful injection immediately upgrades from “text attack” to “privileged action.” This is what distinguishes confused-deputy exploitation from ordinary jailbreak behavior: the consequence is not just harmful text output, but real system-side execution.
 
 The final element is data-instruction fusion. Many systems still assemble prompts through straightforward concatenation of system directives, retrieved context, user input, and tool outputs. Without strict policy gates at execution time, the runtime cannot consistently distinguish what should be interpreted as data from what should be treated as actionable instruction.
@@ -57,6 +59,8 @@ A canonical chain starts when an attacker injects a hidden instruction through p
 This chain is especially dangerous because every step can appear normal in isolation. The prompt looks like text, the model output looks like a valid function call, and the API call is authenticated. The malicious transition happens in the gap between intent and authority.
 
 ## Attack Scenarios
+
+![](./p1.jpg)
 
 <ScenarioTabs />
 
