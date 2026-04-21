@@ -1,0 +1,100 @@
+﻿---
+import { getCollection, render } from 'astro:content';
+import PostLayout from '@/layouts/PostLayout.astro';
+import Toc from '@/components/widgets/Toc.astro';
+
+export async function getStaticPaths() {
+  const postEntries = await getCollection('blogs');
+  return postEntries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+if (!entry) {
+  return Astro.redirect('/404');
+}
+
+const { Content, headings } = await render(entry);
+const filtered = headings.filter((h) => h.depth <= 2);
+---
+
+<PostLayout title={entry.data.title} description={entry.data.description}>
+  <div id="reading-progress" class="reading-progress" style="transform: scaleX(0);"></div>
+
+  <div class="post article">
+    <main class="relative site-container mx-auto my-8 md:my-12">
+      <header class="article-header">
+        <div class="article-tags">
+          {entry.data.tags && entry.data.tags.length > 0 ? (
+            entry.data.tags.map((tag) => (
+              <span class="article-tag letter-spacing-wide text-xs">{tag}</span>
+            ))
+          ) : (
+            <span class="article-tag text-xs">Blog</span>
+          )}
+        </div>
+
+        <h1 class="article-title font-brand">{entry.data.title}</h1>
+
+        <div class="article-meta text-sm text-neutral-500 dark:text-neutral-400">
+          <time datetime={entry.data.publishDate.toISOString()}>
+            {entry.data.publishDate.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </time>
+          {entry.data.read && (
+            <>
+              <span class="article-meta-divider"></span>
+              <span>{entry.data.read} min read</span>
+            </>
+          )}
+        </div>
+      </header>
+
+      <div class="relative flex flex-col lg:flex-row gap-8 lg:gap-12 xl:gap-16">
+        <aside class="relative hidden lg:block lg:w-40 xl:w-50 flex-shrink-0">
+          <div class="toc-sticky-wrapper">
+            <Toc headings={filtered} />
+          </div>
+        </aside>
+
+        <div class="relative flex-1 min-w-0 w-full lg:max-w-none">
+          <article class="article-wrapper">
+            <div class="article-content">
+              <Content />
+            </div>
+          </article>
+        </div>
+      </div>
+    </main>
+  </div>
+</PostLayout>
+
+<style>
+  .toc-sticky-wrapper {
+    position: sticky;
+    top: 8rem;
+  }
+</style>
+
+<script>
+  function updateReadingProgress() {
+    const progressBar = document.getElementById('reading-progress');
+    if (!progressBar) return;
+
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+    const scrollTop = window.scrollY;
+    const scrollPercentage = (scrollTop / (documentHeight - windowHeight)) * 100;
+
+    progressBar.style.transform = `scaleX(${Math.min(scrollPercentage / 100, 1)})`;
+  }
+
+  window.addEventListener('scroll', updateReadingProgress, { passive: true });
+  document.addEventListener('DOMContentLoaded', updateReadingProgress);
+  updateReadingProgress();
+</script>

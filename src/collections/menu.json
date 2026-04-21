@@ -12,6 +12,10 @@
 		"url": "/projects"
 	},
 	{
+		"name": "Blogs",
+		"url": "/blogs"
+	},
+	{
 		"name": "About",
 		"url": "/about"
 	}

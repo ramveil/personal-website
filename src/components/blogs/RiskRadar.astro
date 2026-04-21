@@ -1,0 +1,203 @@
+﻿---
+type Point = { x: number; y: number };
+
+const labels = [
+  'Data Exfiltration',
+  'Privilege Escalation',
+  'Unauthorized API Call',
+  'Data Destruction',
+  'Account Takeover',
+];
+
+const baseline = [8.8, 8.2, 9.1, 7.7, 7.4];
+const mitigated = [1.4, 1.1, 0.9, 1.0, 1.3];
+
+const max = 10;
+const size = 640;
+const center = size / 2;
+const radius = 170;
+const angleStep = (Math.PI * 2) / labels.length;
+
+const toPoint = (value: number, idx: number): Point => {
+  const angle = -Math.PI / 2 + angleStep * idx;
+  const r = (value / max) * radius;
+  return {
+    x: center + Math.cos(angle) * r,
+    y: center + Math.sin(angle) * r,
+  };
+};
+
+const axisPoints = labels.map((_, idx) => toPoint(max, idx));
+const baselinePoints = baseline.map((v, i) => toPoint(v, i));
+const mitigatedPoints = mitigated.map((v, i) => toPoint(v, i));
+
+const levels = [2, 4, 6, 8, 10];
+const levelPolygons = levels.map((level) => labels.map((_, idx) => toPoint(level, idx)));
+
+const pointString = (points: Point[]) => points.map((p) => `${p.x},${p.y}`).join(' ');
+
+const labelMeta = labels.map((label, idx) => {
+  const angle = -Math.PI / 2 + angleStep * idx;
+  const x = center + Math.cos(angle) * (radius + 40);
+  const y = center + Math.sin(angle) * (radius + 40);
+
+  let anchor: 'middle' | 'start' | 'end' = 'middle';
+  if (Math.cos(angle) > 0.32) anchor = 'start';
+  if (Math.cos(angle) < -0.32) anchor = 'end';
+
+  return { label, x, y, anchor };
+});
+---
+
+<section class="risk-radar">
+  <h3>Risk Mitigation Efficacy Analysis</h3>
+
+  <div class="radar-wrap">
+    <svg viewBox={`0 0 ${size} ${size}`} role="img" aria-label="Radar chart of risk mitigation efficacy">
+      {levelPolygons.map((points) => (
+        <polygon points={pointString(points)} fill="none" stroke="rgba(148,163,184,0.35)" stroke-width="1" />
+      ))}
+
+      {axisPoints.map((point) => (
+        <line x1={center} y1={center} x2={point.x} y2={point.y} stroke="rgba(148,163,184,0.45)" stroke-width="1" />
+      ))}
+
+      <polygon
+        points={pointString(baselinePoints)}
+        fill="rgba(190, 24, 93, 0.18)"
+        stroke="rgb(190, 24, 93)"
+        stroke-width="3"
+      />
+
+      <polygon
+        points={pointString(mitigatedPoints)}
+        fill="rgba(13, 148, 136, 0.25)"
+        stroke="rgb(15, 118, 110)"
+        stroke-width="3"
+      />
+
+      {baselinePoints.map((point) => (
+        <circle cx={point.x} cy={point.y} r="6" fill="rgb(190, 24, 93)" stroke="white" stroke-width="2" />
+      ))}
+
+      {mitigatedPoints.map((point) => (
+        <circle cx={point.x} cy={point.y} r="6" fill="rgb(15, 118, 110)" stroke="white" stroke-width="2" />
+      ))}
+
+      {labelMeta.map((item) => (
+        <text x={item.x} y={item.y} text-anchor={item.anchor} dominant-baseline="middle" class="label">
+          {item.label}
+        </text>
+      ))}
+    </svg>
+  </div>
+
+  <div class="legend">
+    <span><i class="dot baseline"></i>Baseline (Unbound Agent)</span>
+    <span><i class="dot mitigated"></i>Post-Mitigation (HITL + Guardrails)</span>
+  </div>
+
+  <p>Theoretical vulnerability scores (lower is better) across attack vectors.</p>
+</section>
+
+<style>
+  .risk-radar {
+    margin-top: 3rem;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    border-radius: 16px;
+    padding: 1.2rem;
+    background: rgba(248, 250, 252, 0.78);
+  }
+
+  .risk-radar h3 {
+    text-align: center;
+    font-size: 1.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin: 0.5rem 0 0.8rem;
+    color: rgb(82 82 91);
+    font-family: var(--font-brand);
+  }
+
+  .radar-wrap {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .risk-radar svg {
+    display: block;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .risk-radar .label {
+    font-size: 14px;
+    fill: rgb(63 63 70);
+    font-family: var(--font-main);
+  }
+
+  .legend {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.1rem;
+    flex-wrap: wrap;
+    color: rgb(82 82 91);
+    font-size: 1.05rem;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 9999px;
+    display: inline-block;
+    margin-right: 0.45rem;
+  }
+
+  .dot.baseline { background: rgb(190 24 93); }
+  .dot.mitigated { background: rgb(15 118 110); }
+
+  .risk-radar > p {
+    text-align: center;
+    margin-top: 0.9rem;
+    color: rgb(120 113 108);
+  }
+
+  @media (max-width: 900px) {
+    .risk-radar .label {
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .risk-radar {
+      padding: 1rem 0.8rem;
+    }
+
+    .risk-radar h3 {
+      font-size: 1.3rem;
+    }
+
+    .risk-radar .label {
+      font-size: 11px;
+    }
+
+    .legend {
+      font-size: 0.9rem;
+    }
+  }
+
+  :global(.dark) .risk-radar {
+    background: rgba(15, 23, 42, 0.88);
+    border-color: rgba(100, 116, 139, 0.45);
+  }
+
+  :global(.dark) .risk-radar h3,
+  :global(.dark) .legend,
+  :global(.dark) .risk-radar > p,
+  :global(.dark) .risk-radar .label {
+    color: rgb(228 228 231);
+    fill: rgb(228 228 231);
+  }
+</style>
