@@ -64,6 +64,10 @@ This chain is especially dangerous because every step can appear normal in isola
 
 <ScenarioTabs />
 
+The reality of this threat is evidenced by `CVE-2025-32711` (EchoLeak), the first documented 'zero-click' exploit in a production AI agent. EchoLeak demonstrated that a remote attacker could send a crafted email to a Microsoft 365 Copilot user that silently exfiltrated sensitive organizational data including private documents and chats without the user ever clicking a link or interacting with the malicious message.
+
+Source: https://www.linkedin.com/posts/martinkra_remember-echoleak-attack-cve-2025-32711-activity-7450055112137281536-ehLW/
+
 ## Mitigations That Actually Change Risk
 
 Effective mitigation requires reducing authority and strengthening intent validation simultaneously. Least privilege alone is insufficient if prompts remain unconstrained and tool calls are blindly trusted. Prompt filtering alone is also insufficient if delegated credentials remain broad. Strong design combines scoped authority, execution-time policy checks, and traceable provenance.
