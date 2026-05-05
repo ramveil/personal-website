@@ -26,6 +26,10 @@
   },
   "homepage": "https://ramveil.com",
   "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=10.0.0"
+  },
   "scripts": {
 		"dev": "astro dev",
 		"start": "astro dev",
