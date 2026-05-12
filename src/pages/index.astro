@@ -1,135 +1,63 @@
 ---
-import Button from "../components/ui/Button.astro";
-import { siteConfig } from "@/config/site";
-import HeroCard from "@/components/home/HeroCard.astro";
 import Layout from "@/layouts/Layout.astro";
-import FeaturedWork from "../components/sections/FeaturedWork.astro";
-import BlogSection from "@/components/sections/BlogSection.astro";
-import SocialCard from "@/components/cards/SocialCard.astro";
-import AnimatedText from "@/components/ui/AnimatedText.astro";
-import Explore from "@/components/sections/Explore.astro";
+import Button from "@/components/ui/Button.astro";
 ---
 
 <Layout
-title="Ramveil's Portofolio"
-description="Junior penetration tester, CTF player, and bug hunter."
-keywords="penetration testing, CTF, bug bounty, security"
+  title="Ramveil's Portofolio"
+  description="Junior penetration tester, CTF player, and bug hunter."
+  keywords="penetration testing, CTF, bug bounty, security"
 >
-  <div
-    class="relative site-container z-20  w-full mx-auto mt-16 px-4 md:mt-18 lg:mt-20 xl:px-0"
-  >
-    <div class="relative w-full px-4 flex flex-col items-center justify-between md:flex-row mb-16 ">
-      <div class="relative w-full md:max-w-[420px] md:w-1/2 text-center sm:text-left sm:-mt-8">
-        <!-- Title - AnimatedText animation -->
-        <h1 class="mb-4">
-          <AnimatedText
-            content="Hi, I'm ramveil"
-            delay={0.1}
-            duration={0.5}
-            stagger={0.08}
-            class="text-5xl text-pri leading-tight md:text-4xl lg:text-6xl font-brand "
-          />
-        </h1>
+  <main class="site-container mx-auto px-4 pb-16 pt-20 md:pt-24 lg:pt-28">
+    <section class="mx-auto max-w-5xl rounded-[28px] border border-primary/20 bg-white/80 p-8 shadow-[0_20px_80px_rgba(61,99,171,0.08)] backdrop-blur-sm dark:border-neutral-800 dark:bg-neutral-950/80 md:p-12">
+      <div class="grid gap-10 md:grid-cols-[1.2fr_0.8fr] md:items-center">
+        <div>
+          <p class="mb-4 text-sm font-medium uppercase tracking-[0.24em] text-primary/70 dark:text-primary-light/80">
+            ramveil.com
+          </p>
+          <h1 class="font-brand text-4xl leading-tight text-neutral-900 dark:text-white md:text-5xl lg:text-6xl">
+            Junior penetration tester, CTF player, and bug hunter.
+          </h1>
+          <p class="mt-5 max-w-2xl text-base leading-7 text-neutral-700 dark:text-neutral-300">
+            The homepage was trimmed back to stable markup so the root route can serve cleanly again.
+            Writeups, projects, and the about page are still available below while I keep the rest of the site safe.
+          </p>
 
-        <!-- First description - AnimatedText animation -->
-        <div class="mb-2">
-          <AnimatedText
-            content="Junior penetration tester, CTF player, and bug hunter."
-            delay={0.3}
-            duration={0.5}
-            stagger={0.015}
-            class="text-base text-neutral-700 dark:text-neutral-300"
-          />
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Button url="/writeups" type="fill">Read writeups</Button>
+            <Button url="/projects">View projects</Button>
+            <Button url="/about">About me</Button>
+          </div>
         </div>
 
-        <!-- Second description - AnimatedText animation -->
-        <div class="mb-4">
-          <AnimatedText
-            content="Focused on learning through hands-on security testing."
-            delay={0.5}
-            duration={0.5}
-            stagger={0.015}
-            class="text-base text-neutral-700 dark:text-neutral-300"
+        <div class="rounded-[24px] border border-dashed border-primary/25 bg-bg-secondary/70 p-6 dark:border-neutral-700 dark:bg-neutral-900/70">
+          <img
+            src="/assets/avatar.png"
+            alt="ramveil avatar"
+            class="mx-auto h-28 w-28 rounded-full object-cover ring-4 ring-white/80 dark:ring-neutral-800"
           />
-        </div>
-
-        <!-- Button - AOS animation -->
-        <div
-          class=""
-          data-aos="fade-up-sm"
-          data-aos-delay="900"
-          data-aos-duration="500"
-          data-aos-once="true"
-        >
-          <Button url="https://tryhackme.com/p/ramveil" type="fill" className="m-auto mt-4 text-center sm:text-left sm:m-0 sm:mt-6 max-w-[200px]">
-            Follow me on Tryhackme
-          </Button>
-        </div>
-
-        <!-- Social Cards - AOS animation -->
-        <div
-          class="social mt-8 mb-8"
-          data-aos="fade-up-sm"
-          data-aos-delay="1000"
-          data-aos-duration="600"
-          data-aos-once="true"
-        >
-          <SocialCard displaySocialIds={[1, 2, 3, 4, 5, 6]}/>
+          <div class="mt-6 space-y-4">
+            <div>
+              <p class="text-xs uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">
+                Focus
+              </p>
+              <p class="mt-1 text-sm text-neutral-800 dark:text-neutral-200">
+                Web exploitation, bug bounty, CTFs, and practical offensive security research.
+              </p>
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">
+                Fast links
+              </p>
+              <ul class="mt-2 space-y-2 text-sm text-neutral-700 dark:text-neutral-300">
+                <li><a href="/blogs" class="hover:text-primary dark:hover:text-primary-light">Blogs</a></li>
+                <li><a href="/rss.xml" class="hover:text-primary dark:hover:text-primary-light">RSS feed</a></li>
+                <li><a href="/assets/resume/SetyaRamadan_CV.pdf?v=20260416" class="hover:text-primary dark:hover:text-primary-light">Resume</a></li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
-
-      <!-- HeroCard - AOS animation -->
-      <div
-        class="relative justify-end w-full mt-16 md:flex md:pl-10 md:w-1/2 md:mt-0 md:translate-y-4 xl:translate-y-0"
-        data-aos="fade-left-sm"
-        data-aos-delay="300"
-        data-aos-duration="800"
-        data-aos-once="true"
-      >
-        <HeroCard
-          imageUrl="/images/detective-conan.png"
-          title=""
-          link=""
-        />
-      </div>
-    </div>
-  </div>
-
-  <section
-    class="mt-26 mb-12"
-    data-aos="fade-up-sm"
-    data-aos-delay="100"
-    data-aos-duration="600"
-    data-aos-once="true"
-  >
-    <Explore title="Explore" />
-  </section>
-
-  <section
-    class="mt-26 mb-12"
-    data-aos="fade-up-sm"
-    data-aos-delay="100"
-    data-aos-duration="600"
-    data-aos-once="true"
-  >
-    <FeaturedWork title="Featured Projects" description="Recent projects and experiments focused on practical, real-world outcomes." limit={5} />
-  </section>
-
-  <section
-    class="mt-26 mb-12"
-    data-aos="fade-up-sm"
-    data-aos-delay="100"
-    data-aos-duration="600"
-    data-aos-once="true"
-  >
-    <BlogSection
-      title="Latest Writeups"
-      description="Short notes and writeups on security, CTFs, and bug hunting."
-      showViewAllButton={true}
-    />
-  </section>
-
+    </section>
+  </main>
 </Layout>
-
-
-
