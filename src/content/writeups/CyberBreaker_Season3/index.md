@@ -8,7 +8,7 @@ img: "/assets/blog/cbc.jpg"
 img_alt: "CBD Qualifications West Regional Season 3 – RSC deserialization and vector OOB"
 ---
 
-{/* Route refresh marker */}
+<!-- Route refresh marker -->
 ![Cover from the original PDF](./fig-01-page-1.png)
 
 > kayanya mau diulang ratusan kali pun aku bakalan tetep milih kamu deh

@@ -1,19 +1,18 @@
 ---
-interface Props {
-  imageUrl: string;
-  title?: string;
-  link?: string;
-}
-
+interface Props { imageUrl: string; }
 const { imageUrl } = Astro.props;
 ---
-
-<div class="w-full flex justify-center md:justify-end">
-  <img
-    src={imageUrl}
-    alt="Hero image"
-    loading="eager"
-    decoding="async"
-    class="block w-full max-w-[700px] h-auto object-contain"
-  />
-</div>
+<figure class="conan-figure">
+  <div class="dossier-label"><span>CASEFILE</span><span>01</span></div>
+  <div class="dossier-frame">
+    <span class="dossier-spine" aria-hidden="true">RAMVEIL DOSSIER</span>
+    <div class="dossier-paper">
+      <span class="paper-corner" aria-hidden="true"></span>
+      <span class="dossier-crop crop-top" aria-hidden="true"></span>
+      <span class="dossier-crop crop-bottom" aria-hidden="true"></span>
+      <img src={imageUrl} alt="Detective Conan — observing the next clue" loading="eager" fetchpriority="high" decoding="async" width="736" height="1153" />
+      <figcaption><span>01 /</span> observe, question, connect</figcaption>
+    </div>
+    <span class="paperclip" aria-hidden="true"></span>
+  </div>
+</figure>

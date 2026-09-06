@@ -20,64 +20,64 @@
   --color-neutral-50: #f7f9fc;
   --color-neutral-100: #edf1f8;
   --color-neutral-200: #dfe4ed;
-  --color-neutral-300: #c5cedb;
-  --color-neutral-400: #92a1b7;
-  --color-neutral-500: #677487;
-  --color-neutral-600: #4f5a6d;
-  --color-neutral-700: #3f4a5a;
-  --color-neutral-800: #2c3542;
-  --color-neutral-900: #19222f;
-  --color-neutral-950: #10161f;
+  --color-neutral-300: #d3d0c4;
+  --color-neutral-400: #a0a69b;
+  --color-neutral-500: #717b6b;
+  --color-neutral-600: #56624f;
+  --color-neutral-700: #485046;
+  --color-neutral-800: #30372e;
+  --color-neutral-900: #1e241e;
+  --color-neutral-950: #101410;
 
-  --color-primary: #2d6dc3;
-  --color-primary-rgb: 45, 109, 195;
-  --color-primary-strong: #0066ff;
-  --color-primary-dark: #2d6dc3;
-  --color-primary-light: #8fb9ff;
-  --color-primary-light-dark: #bcd8ff;
-  --color-primary-lighter: #6da7ff;
+  --color-primary: #735b30;
+  --color-primary-rgb: 115, 91, 48;
+  --color-primary-strong: #604921;
+  --color-primary-dark: #735b30;
+  --color-primary-light: #B89E69;
+  --color-primary-light-dark: #d3bd91;
+  --color-primary-lighter: #b7aa87;
   /* Article-specific variables */
   --color-primary-bg: var(--color-bg-primary-light);
   --color-primary-bg-light: var(--color-bg-secondary);
 
 
-  --color-btn-primary: #2d6dc3;
-  --color-btn-primary-hover: #0066ff;
-  --color-btn-primary-dark: #2871e9;
-  --color-btn-primary-dark-hover: #2d6dc3;
+  --color-btn-primary: #735b30;
+  --color-btn-primary-hover: #604921;
+  --color-btn-primary-dark: #735b30;
+  --color-btn-primary-dark-hover: #735b30;
 
   /* Accent colors */
-  --color-accent: #fad13b;
-  --color-accent-light: #faeb75;
+  --color-accent: #B89E69;
+  --color-accent-light: #d3bd91;
 
   /* Background colors */
 
-  --color-bg-primary: #fdfaf5;
+  --color-bg-primary: #f5f1e7;
   --color-bg-secondary: #fff;
-  --color-bg-primary-light: #faf9f5;
-  --color-bg-primary-deep: #fefcf4;
+  --color-bg-primary-light: #f5f1e7;
+  --color-bg-primary-deep: #ebe5d8;
 
-  --color-bg-primary-dark: #0b1220;
-  --color-bg-secondary-dark: #0f1b2d;
+  --color-bg-primary-dark: #141613;
+  --color-bg-secondary-dark: #1D201B;
 
 
   /* Text colors */
-  --color-text-primary: #2d6dc3;
-  --color-text-secondary: #3f4a5a;
-  --color-text-tertiary: #7a6550;
+  --color-text-primary: #252c28;
+  --color-text-secondary: #485046;
+  --color-text-tertiary: #626c63;
 
-  --color-text-primary-dark: #3884eb;
-  --color-text-secondary-dark: #c5cedb;
-  --color-text-tertiary-dark: #9bb3d7;
+  --color-text-primary-dark: #E9E5DA;
+  --color-text-secondary-dark: #d3d0c4;
+  --color-text-tertiary-dark: #AAA99B;
 }
 
 /* Dark mode variable overrides */
 html.dark {
-  --color-primary-rgb: 56, 132, 235;
-  --color-primary-light-dark: #3884eb;
-  --color-primary-lighter: #8fb9ff;
-  --color-primary-bg: rgba(56, 132, 235, 0.15);
-  --color-primary-bg-light: rgba(56, 132, 235, 0.05);
+  --color-primary-rgb: 184, 158, 105;
+  --color-primary-light-dark: #B89E69;
+  --color-primary-lighter: #B89E69;
+  --color-primary-bg: rgba(184, 158, 105, 0.15);
+  --color-primary-bg-light: rgba(184, 158, 105, 0.05);
 }
 
 /* Add typography styles */
@@ -245,5 +245,3 @@ body::-webkit-scrollbar-thumb:active,
 div::-webkit-scrollbar-thumb:active {
   background: var(--color-primary-dark) !important;
 }
-
-

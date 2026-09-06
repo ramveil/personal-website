@@ -8,7 +8,7 @@ interface Props {
 
 const { limit } = Astro.props;
 
-let allProjects = await getCollection("projects");
+let allProjects = (await getCollection("projects")).filter(project => project.data.isShow !== false);
 
 allProjects = allProjects.sort(
   (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)
@@ -20,7 +20,7 @@ if (limit !== undefined) {
 ---
 
 <section class="py-8 md:py-8">
-  <div class="space-y-8 md:space-y-10">
+  <div class="project-list">
     {allProjects
       .filter(project => project.data.isShow !== false)
       .map((project, index) => (

@@ -29,11 +29,12 @@ function buildTree(list: Heading[]): HeadingNode[] {
   return root;
 }
 const tree = buildTree(headings);
+const tocId = `toc-${crypto.randomUUID()}`;
 ---
 
 <div class="toc-container">
   <div class="toc-header">
-    <button id="toc-toggle" aria-expanded="false" aria-controls="toc-content">
+    <button data-toc-toggle aria-expanded="false" aria-controls={tocId}>
       <span class="font-brand text-lg">TOC</span>
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="chevron-down">
         <path d="m6 9 6 6 6-6"/>
@@ -42,13 +43,13 @@ const tree = buildTree(headings);
   </div>
   <div class="toc-title">
     <span class="toc-title-text font-brand text-base">TOC</span>
-    <button id="toc-toggle-desktop" class="toc-toggle-desktop" aria-expanded="true" aria-controls="toc-content" aria-label="Toggle table of contents">
+    <button data-toc-toggle-desktop class="toc-toggle-desktop" aria-expanded="true" aria-controls={tocId} aria-label="Toggle table of contents">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="chevron-up">
         <path d="m18 15-6-6-6 6"/>
       </svg>
     </button>
   </div>
-  <nav id="toc-content" class="toc" aria-label="TOC">
+  <nav id={tocId} data-toc-content class="toc" aria-label="TOC">
     <ul>
       {tree.map(node => (
         <li class={`toc-item font-brand depth-${node.depth}`}>
@@ -284,7 +285,7 @@ const tree = buildTree(headings);
     margin-bottom: 0.5rem;
   }
 
-  #toc-toggle {
+  [data-toc-toggle] {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -303,24 +304,24 @@ const tree = buildTree(headings);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  :global(.dark) #toc-toggle {
+  :global(.dark) [data-toc-toggle] {
     background: var(--color-bg-secondary-dark);
     border-color: var(--color-neutral-700);
     color: var(--color-text-primary-dark);
   }
 
-  #toc-toggle:hover {
+  [data-toc-toggle]:hover {
     background: var(--color-neutral-100);
     border-color: var(--color-primary);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
   }
 
-  :global(.dark) #toc-toggle:hover {
+  :global(.dark) [data-toc-toggle]:hover {
     background: var(--color-bg-tertiary-dark);
     border-color: var(--color-primary-light-dark);
   }
 
-  #toc-toggle:active {
+  [data-toc-toggle]:active {
     transform: scale(0.98);
   }
   .chevron-down {
@@ -328,7 +329,7 @@ const tree = buildTree(headings);
   }
 
 
-  #toc-toggle[aria-expanded="true"] .chevron-down {
+  [data-toc-toggle][aria-expanded="true"] .chevron-down {
     transform: rotate(180deg);
   }
 
@@ -384,16 +385,16 @@ const tree = buildTree(headings);
   .toc-container {
     margin: 1rem 0;
   }
-  #toc-toggle {
+  [data-toc-toggle] {
     padding: 0.5rem 0.75rem;
     font-size: var(--text-sm);
   }
 }
 
-#toc-content::-webkit-scrollbar {
+[data-toc-content]::-webkit-scrollbar {
   width: 6px !important; }
 
-#toc-content::-webkit-scrollbar-track {
+[data-toc-content]::-webkit-scrollbar-track {
   background: var(--color-neutral-200) !important;
   border-radius: 6px !important;
   -webkit-border-radius: 6px !important;
@@ -401,12 +402,12 @@ const tree = buildTree(headings);
   -ms-border-radius: 6px !important;
   -o-border-radius: 6px !important; }
 
-#toc-content::-webkit-scrollbar-thumb {
+[data-toc-content]::-webkit-scrollbar-thumb {
   background: var(--color-neutral-300) !important;
   border-radius: 6px !important; }
-  #toc-content::-webkit-scrollbar-thumb:hover {
+  [data-toc-content]::-webkit-scrollbar-thumb:hover {
     background: var(--color-primary) !important; }
-  #toc-content::-webkit-scrollbar-thumb:active {
+  [data-toc-content]::-webkit-scrollbar-thumb:active {
     background: var(--color-primary-dark) !important; }
 
 </style>
@@ -418,9 +419,9 @@ const tree = buildTree(headings);
     const containers = document.querySelectorAll('.toc-container');
 
     containers.forEach((container) => {
-      const tocToggle = container.querySelector('#toc-toggle');
-      const tocToggleDesktop = container.querySelector('#toc-toggle-desktop');
-      const tocContent = container.querySelector('#toc-content');
+      const tocToggle = container.querySelector('[data-toc-toggle]');
+      const tocToggleDesktop = container.querySelector('[data-toc-toggle-desktop]');
+      const tocContent = container.querySelector('[data-toc-content]');
 
       // Handle mobile fold/unfold
       if (tocToggle && tocContent) {
@@ -484,7 +485,7 @@ const tree = buildTree(headings);
           tocLinks.forEach(l => l.classList.remove('active'));
           link.classList.add('active');
 
-          if (isMobile && tocToggle && tocContent) {
+          if (window.innerWidth < 1024 && tocToggle && tocContent) {
             tocToggle.setAttribute('aria-expanded', 'false');
             tocContent.classList.remove('expanded');
           }
@@ -529,7 +530,7 @@ const tree = buildTree(headings);
                 const linkRect = activeLink.getBoundingClientRect();
                 const containerRect = tocContainer.getBoundingClientRect();
                 if (linkRect.bottom > containerRect.bottom || linkRect.top < containerRect.top) {
-                  activeLink.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                  tocContainer.scrollTop += linkRect.top - containerRect.top;
                 }
               }
             }

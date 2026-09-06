@@ -10,7 +10,7 @@ import {
 	Terminal,
 } from "@lucide/astro";
 import { siteConfig } from "@/config/site.js";
-import social from "@/collections/social.json";
+import SocialCard from "@/components/cards/SocialCard.astro";
 import AboutExperience from "@/components/elements/AboutExperience.astro";
 import Button from "@/components/ui/Button.astro";
 import Matter from "@/components/ui/Matter.astro";
@@ -48,6 +48,7 @@ const experiences = [
 ---
 
 <Layout title="About Me">
+<div class="about-page">
   <!-- Mobile TOC -->
   <div class="block lg:hidden px-7 pt-6">
     <Toc headings={filtered} />
@@ -71,12 +72,12 @@ const experiences = [
           data-aos-duration="500"
           data-aos-once="true"
         >
-            <h2
+            <h1
               id="about-me"
               class="text-2xl font-brand tracking-tight  sm:text-3xl lg:text-4xl"
             >
              About Me
-            </h2>
+            </h1>
             <div class="w-full border-b-1 border-dashed border-b-gray-200 dark:border-b-neutral-700 mt-4 mb-8"></div>
       </div>
 
@@ -116,39 +117,7 @@ const experiences = [
           data-aos-duration="600"
           data-aos-once="true"
         >
-             <div class="social-list flex flex-wrap gap-2 items-center justify-start mt-6 mb-8">
-                {social
-                  .filter(item => item.isShow !== false)
-                  .map((item, index) => (
-                    <a
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="social-item relative group overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-2 hover:rotate-[-6deg] hover:shadow-lg"
-                      data-aos="fade-up-xs"
-                      data-aos-delay={400 + (index * 50)}
-                      data-aos-duration="400"
-                      data-aos-once="true"
-                    >
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        class="w-[96px] h-[96px] rounded-xl object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                      <div class="absolute bottom-[10px] left-[12px] z-10">
-                        <div class="social-name font-semibold text-[10px] text-white drop-shadow-md">
-                          {item.name}
-                        </div>
-                        <div class="social-username text-[9px] text-white/85 drop-shadow-sm">
-                          @{item.username}
-                        </div>
-                      </div>
-                      {/* Hover overlay */}
-                      {/* <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div> */}
-                    </a>
-                  ))
-                }
-             </div>
+             <div class="mt-6 mb-8"><SocialCard displaySocialIds={[]} /></div>
         </div>
 
         <div class="w-full border-b-1 border-dashed border-b-gray-200 dark:border-b-neutral-700 mt-4 mb-8"></div>
@@ -185,14 +154,13 @@ const experiences = [
 
 
         <div
-          class="mt-8 mb-16 flex item-center justify-start gap-3"
+          class="mt-8 mb-16 flex flex-wrap items-center justify-start gap-3"
           data-aos="fade-up-xs"
           data-aos-delay="400"
           data-aos-duration="500"
           data-aos-once="true"
         >
               <Button url="mailto:rama@ramveil.com" > <Mail  size={16} />  rama@ramveil.com</Button>
-              <Button url={siteConfig.resume} type="fill" download={true}> Resume <ArrowUpRight  size={16} /> </Button>
         </div>
 
         <div class="w-full border-b-1 border-dashed border-b-neutral-200 dark:border-b-neutral-700 mt-4 mb-8"></div>
@@ -361,6 +329,7 @@ const experiences = [
       </main>
     </div>
   </div>
+</div>
 </Layout>
 
 <style>

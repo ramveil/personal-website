@@ -7,8 +7,6 @@ export const siteConfig = {
 	author: "ramveil",
 	url: SITE_URL,
 	mail: "rama@ramveil.com",
-	// resume add your resume file path here: /assets/resume.pdf
-	resume: "/assets/resume/SetyaRamadan_CV.pdf?v=20260416",
 	utm: {
 		source: `${SITE_URL}`,
 		medium: "referral",

@@ -18,7 +18,7 @@ const {
   limit
 } = Astro.props;
 
-const projectEntries = await getCollection("projects");
+const projectEntries = (await getCollection("projects")).filter(project => project.data.isShow !== false);
 const totalProjects = projectEntries.length;
 
 let allProjects = projectEntries.sort(
@@ -44,7 +44,7 @@ const shouldShowViewAll = limit !== undefined
     <SectionHeader title={title} description={description} />
 
     {featuredProjects.length > 0 && (
-      <div class="space-y-8 md:space-y-10" data-aos-delay="750" data-aos="fade-up-sm" data-aos-duration="1000" data-aos-once="true">
+      <div class="project-list">
         {featuredProjects
           .filter(project => project.data.isShow !== false)
           .map((project, index) => (
@@ -64,7 +64,7 @@ const shouldShowViewAll = limit !== undefined
     )}
 
     {gridProjects.length > 0 && (
-      <div class="grid gap-6 md:gap-8 md:grid-cols-2" data-aos-delay="150" data-aos="fade-up-sm" data-aos-duration="1000" data-aos-once="true">
+      <div class="grid gap-6 md:gap-8 md:grid-cols-2">
         {gridProjects
           .filter(project => project.data.isShow !== false)
           .map((project, index) => (

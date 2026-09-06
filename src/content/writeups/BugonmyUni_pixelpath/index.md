@@ -9,7 +9,7 @@ img: "/assets/blog/bugbounty.webp"
 img_alt: "MBM Vulnerability Report"
 ---
 
-{/* Route refresh marker */}
+<!-- Route refresh marker -->
 
 ## 1. Summary
 

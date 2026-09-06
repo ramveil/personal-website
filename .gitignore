@@ -37,3 +37,11 @@ Thumbs.db
 *.tmp
 *.temp
 .cache/
+
+# Local design review backups and browser tooling
+.review/
+
+# Private CV files and local environment variants
+public/assets/resume/
+.env.*
+!.env.example

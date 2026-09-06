@@ -1,132 +1,37 @@
 ---
-import Button from "../components/ui/Button.astro";
-import { siteConfig } from "@/config/site";
-import HeroCard from "@/components/home/HeroCard.astro";
-import Layout from "@/layouts/Layout.astro";
-import FeaturedWork from "../components/sections/FeaturedWork.astro";
-import BlogSection from "@/components/sections/BlogSection.astro";
-import SocialCard from "@/components/cards/SocialCard.astro";
-import AnimatedText from "@/components/ui/AnimatedText.astro";
-import Explore from "@/components/sections/Explore.astro";
+import { ArrowUpRight, Box, Flag } from '@lucide/astro';
+import SocialCard from '@/components/cards/SocialCard.astro';
+import Button from '@/components/ui/Button.astro';
+import HeroCard from '@/components/home/HeroCard.astro';
+import Layout from '@/layouts/Layout.astro';
+import FeaturedWork from '@/components/sections/FeaturedWork.astro';
+import CasefileWriteups from '@/components/sections/CasefileWriteups.astro';
+import Explore from '@/components/sections/Explore.astro';
 ---
-
-<Layout
-title="Ramveil's Portofolio"
-description="Junior penetration tester, CTF player, and bug hunter."
-keywords="penetration testing, CTF, bug bounty, security"
->
-  <div
-    class="relative site-container z-20  w-full mx-auto mt-16 px-4 md:mt-18 lg:mt-20 xl:px-0"
-  >
-    <div class="relative w-full px-4 flex flex-col items-center justify-between md:flex-row mb-16 ">
-      <div class="relative w-full md:max-w-[420px] md:w-1/2 text-center sm:text-left sm:-mt-8">
-        <!-- Title - AnimatedText animation -->
-        <h1 class="mb-4">
-          <AnimatedText
-            content="Hi, I'm ramveil"
-            delay={0.1}
-            duration={0.5}
-            stagger={0.08}
-            class="text-5xl text-pri leading-tight md:text-4xl lg:text-6xl font-brand "
-          />
-        </h1>
-
-        <!-- First description - AnimatedText animation -->
-        <div class="mb-2">
-          <AnimatedText
-            content="Junior penetration tester, CTF player, and bug hunter."
-            delay={0.3}
-            duration={0.5}
-            stagger={0.015}
-            class="text-base text-neutral-700 dark:text-neutral-300"
-          />
+<Layout title="Ramveil's Portfolio" description="Penetration Tester, CTF Player @ idktheflag and THEM?!, and Bug Hunter for sure." keywords="penetration testing, CTF, bug bounty, security">
+  <main class="home-page">
+    <section class="site-container hero-section" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span>Lifelong Learner</p>
+        <h1 id="hero-title">Every detail<br /><em>leaves a trace</em><span class="accent-text">.</span></h1>
+        <div class="hero-rule" aria-hidden="true"></div><p class="hero-intro">I'm ramveil.</p>
+        <p class="hero-role">Penetration Tester, CTF Player @ <span class="team-name">idktheflag</span> and <span class="team-name">THEM?!</span>, and Bug Hunter for sure.</p>
+        <div class="hero-connect">
+          <SocialCard />
+          <div class="training-links">
+            <a class="htb-profile" href="https://profile.hackthebox.com/profile/019c71c4-1227-70fc-b5a5-2c267360780c" target="_blank" rel="noopener noreferrer"><Box size={20} aria-hidden="true" /><span>Hack The Box</span><ArrowUpRight size={16} aria-hidden="true" /></a>
+            <a href="https://tryhackme.com/p/ramveil" target="_blank" rel="noopener noreferrer"><Flag size={16} aria-hidden="true" />TryHackMe<ArrowUpRight size={14} aria-hidden="true" /></a>
+            <a href="https://x.com/ramveill" target="_blank" rel="noopener noreferrer">X<ArrowUpRight size={14} aria-hidden="true" /></a>
+          </div>
         </div>
-
-        <!-- Second description - AnimatedText animation -->
-        <div class="mb-4">
-          <AnimatedText
-            content="Focused on learning through hands-on security testing."
-            delay={0.5}
-            duration={0.5}
-            stagger={0.015}
-            class="text-base text-neutral-700 dark:text-neutral-300"
-          />
-        </div>
-
-        <!-- Button - AOS animation -->
-        <div
-          class=""
-          data-aos="fade-up-sm"
-          data-aos-delay="900"
-          data-aos-duration="500"
-          data-aos-once="true"
-        >
-          <Button url="https://tryhackme.com/p/ramveil" type="fill" className="m-auto mt-4 text-center sm:text-left sm:m-0 sm:mt-6 max-w-[200px]">
-            Follow me on Tryhackme
-          </Button>
-        </div>
-
-        <!-- Social Cards - AOS animation -->
-        <div
-          class="social mt-8 mb-8"
-          data-aos="fade-up-sm"
-          data-aos-delay="1000"
-          data-aos-duration="600"
-          data-aos-once="true"
-        >
-          <SocialCard displaySocialIds={[1, 2, 3, 4, 5, 6]}/>
+        <div class="hero-actions">
+          <Button url="/writeups" >Explore writeups <ArrowUpRight size={16} /></Button>
         </div>
       </div>
-
-      <!-- HeroCard - AOS animation -->
-      <div
-        class="relative justify-end w-full mt-16 md:flex md:pl-10 md:w-1/2 md:mt-0 md:translate-y-4 xl:translate-y-0"
-        data-aos="fade-left-sm"
-        data-aos-delay="300"
-        data-aos-duration="800"
-        data-aos-once="true"
-      >
-        <HeroCard
-          imageUrl="/images/detective-conan.png"
-          title=""
-          link=""
-        />
-      </div>
-    </div>
-  </div>
-
-  <section
-    class="mt-26 mb-12"
-    data-aos="fade-up-sm"
-    data-aos-delay="100"
-    data-aos-duration="600"
-    data-aos-once="true"
-  >
-    <Explore title="Explore" />
-  </section>
-
-  <section
-    class="mt-26 mb-12"
-    data-aos="fade-up-sm"
-    data-aos-delay="100"
-    data-aos-duration="600"
-    data-aos-once="true"
-  >
-    <FeaturedWork title="Featured Projects" description="Recent projects and experiments focused on practical, real-world outcomes." limit={5} />
-  </section>
-
-  <section
-    class="mt-26 mb-12"
-    data-aos="fade-up-sm"
-    data-aos-delay="100"
-    data-aos-duration="600"
-    data-aos-once="true"
-  >
-    <BlogSection
-      title="Latest Writeups"
-      description="Short notes and writeups on security, CTFs, and bug hunting."
-      showViewAllButton={true}
-    />
-  </section>
-
+      <HeroCard imageUrl="/images/detective-conan.png" />
+    </section>
+    <section class="home-section"><CasefileWriteups /></section>
+    <section class="home-section case-projects"><FeaturedWork title="Selected projects" description="" limit={5} /><div class="site-container section-end"><a class="text-link" href="/projects">View all projects <ArrowUpRight size={16} /></a></div></section>
+    <section class="home-section"><Explore /></section>
+  </main>
 </Layout>

@@ -22,6 +22,8 @@ import "aos/dist/aos.css";
 import "../styles/aos-custom.css";
 import '../styles/article.css';
 import '../styles/article-enhancements.css';
+import '../styles/portfolio.css';
+import '../styles/casefile.css';
 ---
 
 <html lang="en">
@@ -35,20 +37,21 @@ import '../styles/article-enhancements.css';
     <TrackGa />
     <!-- Used to add dark mode right away, adding here prevents any flicker -->
     <script is:inline>
-      if (typeof Storage !== 'undefined') {
+      try {
         const savedTheme = localStorage.getItem('dark_mode');
         if (savedTheme === 'true' || savedTheme === null) {
           document.documentElement.classList.add('dark')
         }
-      }
+      } catch { document.documentElement.classList.add('dark'); }
     </script>
 
     <link rel="icon" type="image/x-icon" href="/favicon.png" />
   </head>
   <body class="antialiased bg-bg-primary dark:bg-bg-primary-dark max-w-full overflow-x-hidden">
+    <a href="#main-content" class="skip-link">Skip to content</a>
     <TopBg />
     <Header />
-    <slot />
+    <div id="main-content" tabindex="-1"><slot /></div>
     <Footer />
     <script>
       import "../assets/js/main.js";

@@ -5,6 +5,7 @@ import sitemap from "@astrojs/sitemap";
 import expressiveCode from "astro-expressive-code";
 import { fileURLToPath } from "url";
 import path from "path";
+import rehypeImageAlt from './src/plugins/rehype-image-alt.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Get the site URL from environment variables, or use the default value if not set
@@ -15,6 +16,7 @@ const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://ramveil.com/';
 export default defineConfig({
   site: siteUrl,
   base: '/',
+  markdown: { rehypePlugins: [rehypeImageAlt] },
   envPrefix: 'PUBLIC_',
   vite: {
     plugins: [tailwindcss()],
